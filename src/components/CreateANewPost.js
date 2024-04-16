@@ -12,7 +12,7 @@ export default function CreateANewPost() {
     console.log("done");
   }
   return (
-    <div className="flex items-center justify-center h-screen bg-gradient-to-r from-green-200 to-blue-300">
+    <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-r from-green-200 to-blue-300">
       <textarea
         className="w-96 h-40 border border-gray-300 rounded-md p-2"
         placeholder="Write your post here..."

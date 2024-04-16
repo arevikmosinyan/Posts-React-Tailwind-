@@ -14,14 +14,14 @@ function classNames(...classes) {
 
 export default function NavBar() {
   return (
-    <Disclosure as="nav" className="bg-gray-800">
+    <Disclosure as="nav" className="bg-gray-800 ">
       <>
         <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
           <div className="relative flex h-16 items-center justify-between">
-            {navigation.map((item) => (
+            {navigation.map((link) => (
               <Link
-                key={item.name}
-                to={item.href}
+                key={link.name}
+                to={link.href}
                 className={classNames(
                   "rounded-full px-9 py-2 text-gray-300 font-medium",
                   "border border-blue-400 border-opacity-50",
@@ -29,7 +29,7 @@ export default function NavBar() {
                   "transition duration-300 ease-in-out  hover:text-white hover:font-bold"
                 )}
               >
-                {item.name}
+                {link.name}
               </Link>
             ))}
           </div>

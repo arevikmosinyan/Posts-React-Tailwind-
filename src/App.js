@@ -1,7 +1,7 @@
 import React from "react";
 import "./App.css";
 import NavBar from "./components/NavBar";
-import HomePage from "./components/HomePage";
+import HomePage from "./components/HomePage1";
 import CreateANewPost from "./components/CreateANewPost";
 import DetailedPost from "./components/DetailedPost";
 import { DETAILS_ROUTE, CREATE_ROUTE, HOME_ROUTE } from "./constants/constant";
