@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
+import { useNavigate } from "react-router-dom";
+import { DETAILS_ROUTE } from "../constants/constant";
 
 export default function HomePage() {
   const [posts, setPosts] = useState([]);
@@ -8,6 +10,8 @@ export default function HomePage() {
   const [pageNumber, setPageNumber] = useState(1);
   const [countOfPages, setCountOfPages] = useState(0);
   const [additionalPage, setAdditionalPage] = useState(false);
+
+  const navigate = useNavigate();
 
   let indexOfTheLastPostOfThePage = pageNumber * postCountForASinglePage;
   let indexOfTheFirstPostOfThePage =
@@ -98,12 +102,23 @@ export default function HomePage() {
       <div className="flex flex-col justify-center">
         <div className="p-6 h-[75vh] w-[70vw] flex flex-col justify-center overflow-y-auto overflow-x-auto bg-white bg-opacity-40 rounded-lg">
           {postsForSinglePage.map((post) => (
-            <div key={post.id} className="mb-4 text-left">
-              <div className="text-gray-600 mb-1">User ID: {post.id}</div>
-              <div className="text-blue-700 font-bold mb-1">
-                Title: {post.title}
+            <div className="bg-red-500 mb-6 p-5 rounded-lg flex">
+              <div key={post.id} className="mb-4 text-left">
+                <div className="text-gray-600 mb-1">User ID: {post.id}</div>
+                <div className="text-blue-700 font-bold mb-1">
+                  Title: {post.title}
+                </div>
+                <div className="text-gray-800">{post.body}</div>
               </div>
-              <div className="text-gray-800">{post.body}</div>
+
+              <div>
+                <button
+                  className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                  onClick={() => navigate(DETAILS_ROUTE)}
+                >
+                  Detailes
+                </button>
+              </div>
             </div>
           ))}
         </div>
