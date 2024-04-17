@@ -26,6 +26,7 @@ export default function CreateANewPost() {
   function handleDone() {
     const newPost = { name: name, title: title, post: post };
     setCreatedPosts([...createdPosts, newPost]);
+    // navigate(HOME_ROUTE, { state: { createdPosts: createdPosts } });
     setName("");
     setTitle("");
     setPost("");

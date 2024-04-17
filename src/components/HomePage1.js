@@ -12,16 +12,10 @@ export default function HomePage() {
   const [countOfPages, setCountOfPages] = useState(0);
   const [additionalPage, setAdditionalPage] = useState(false);
   const location = useLocation();
-
-  // const [postsFromCreatedPosts, setPostsFromCreatedPosts] = useState(
-  //   location.state?.createdPosts
-  // );
-
   const navigate = useNavigate();
 
   /*------------------------------------------------------------local Storage----------------------------------------------------------------------*/
 
-  // Load posts from local storage when component mounts
   useEffect(() => {
     const savedPosts = JSON.parse(localStorage.getItem("posts"));
     if (savedPosts) {
@@ -29,17 +23,17 @@ export default function HomePage() {
     }
   }, []);
 
-  // Save posts to local storage whenever location.state.createdPosts changes
   useEffect(() => {
     if (location.state?.createdPosts) {
-      const updatedPosts = [...posts, ...location.state.createdPosts];
+      const updatedPosts = [...posts, ...location.state?.createdPosts];
       setPosts(updatedPosts);
       localStorage.setItem("posts", JSON.stringify(updatedPosts));
     }
   }, [location.state?.createdPosts]);
 
   /*---------------------------------------------------------------------------------------------------------------------------------------------------*/
-  /*---------------------------------------------------------------------------------------fetching from API----------------------------------------------- */
+
+  /*-----------------------------------------------------------fetching from API----------------------------------------------------------------------- */
   useEffect(() => {
     let canceled = false;
     fetch("https://jsonplaceholder.typicode.com/posts")
@@ -54,35 +48,6 @@ export default function HomePage() {
   }, []);
 
   /*-----------------------------------------------------------------------------------------------------------------------------------------------------------*/
-
-  /*-------------------------------------------------------------------Getting created posts from CreateANewPost component-------------------------------------*/
-
-  useEffect(() => {
-    if (location.state?.createdPosts) {
-      // setPostsFromCreatedPosts([
-      //   ...postsFromCreatedPosts,
-      //   ...location.state?.createdPosts,
-      // ]);
-
-      console.log(
-        JSON.stringify(location.state?.createdPosts) +
-          " location.state?.createdPosts in home page useEffect"
-      );
-    }
-
-    // console.log(
-    //   Array.isArray(postsFromCreatedPosts) +
-    //     " postsFromCreatedPosts in home page useEffect" +
-    //     JSON.stringify(postsFromCreatedPosts)
-    // );
-    // console.log(
-    //   Array.isArray(location.state?.createdPosts) +
-    //     JSON.stringify(location.state?.createdPosts) +
-    //     " location.state.createdPosts in home page useEffect"
-    // );
-  }, [location.state?.createdPosts.length]);
-
-  /*----------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
   /*------------------------------------------------------------------creating pages------------------------------------------------------------------------*/
 
@@ -118,11 +83,6 @@ export default function HomePage() {
     }
   }, []);
 
-  //   useEffect(() => {
-  //     console.log(countOfPages + " countOfPages");
-  //     console.log(JSON.stringify(postsForSinglePage) + " postsForSinglePage");
-  //   }, [countOfPages, postsForSinglePage]);
-
   function changeThePage(page) {
     setPageNumber(page);
   }
@@ -144,10 +104,6 @@ export default function HomePage() {
   //   useState(10);
 
   /*-----------------------------------------------------------------------------------------------------------------------------------------------------------*/
-
-  /*----------------------------------------------------------------------------------------------------------------------------------------------------------*/
-
-  /*----------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
   return (
     <div className=" flex posts-center justify-center align-center h-screen bg-gradient-to-r from-blue-200 to-purple-300">
@@ -190,7 +146,9 @@ export default function HomePage() {
                 <div>
                   <button
                     className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-                    onClick={() => navigate(DETAILS_ROUTE)}
+                    onClick={() =>
+                      navigate(DETAILS_ROUTE, { state: { post: createdPost } })
+                    }
                   >
                     Detailes
                   </button>
