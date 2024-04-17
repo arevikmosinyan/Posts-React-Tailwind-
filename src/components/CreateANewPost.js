@@ -1,20 +1,35 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { HOME_ROUTE } from "../constants/constant";
 
 export default function CreateANewPost() {
-  const [post, setPost] = useState("");
   const [name, setName] = useState("");
   const [title, setTitle] = useState("");
+  const [post, setPost] = useState("");
+  const [createdPost, setCreatedPost] = useState({});
   console.log(post + " post");
   console.log(name + " name");
   console.log(title + " title");
 
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setCreatedPost({ ...createdPost, name: name, title: title, post: post });
+  }, [name, title, post]);
+
   function handleCancel() {
     console.log("canceled");
   }
+
   function handleDone() {
     console.log("done");
+    navigate(HOME_ROUTE, { state: { createdPost } });
+    setName("");
+    setTitle("");
+    setPost("");
   }
+
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-r from-green-200 to-blue-300">
       <textarea
