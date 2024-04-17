@@ -11,41 +11,34 @@ export default function HomePage() {
   const [pageNumber, setPageNumber] = useState(1);
   const [countOfPages, setCountOfPages] = useState(0);
   const [additionalPage, setAdditionalPage] = useState(false);
-  const [createdPosts, setCreatedPosts] = useState([]);
-  const navigate = useNavigate();
   const location = useLocation();
 
-  let indexOfTheLastPostOfThePage = pageNumber * postCountForASinglePage;
-  let indexOfTheFirstPostOfThePage =
-    indexOfTheLastPostOfThePage - postCountForASinglePage;
-  let postsForSinglePage = posts.slice(
-    indexOfTheFirstPostOfThePage,
-    indexOfTheLastPostOfThePage
-  );
-  console.log(JSON.stringify(createdPosts) + " createdPosts");
+  // const [postsFromCreatedPosts, setPostsFromCreatedPosts] = useState(
+  //   location.state?.createdPosts
+  // );
 
+  const navigate = useNavigate();
+
+  /*------------------------------------------------------------local Storage----------------------------------------------------------------------*/
+
+  // Load posts from local storage when component mounts
   useEffect(() => {
-    if (location.state?.createdPost) {
-      setCreatedPosts([
-        ...createdPosts,
-        {
-          name: location.state.createdPost.name,
-          title: location.state.createdPost.title,
-          post: location.state.createdPost.post,
-        },
-      ]);
+    const savedPosts = JSON.parse(localStorage.getItem("posts"));
+    if (savedPosts) {
+      setPosts(savedPosts);
     }
-  }, [location.state?.createdPost]);
+  }, []);
 
-  /*------------------------------------------------------------------creating pages------------------------------------------------------------------------*/
+  // Save posts to local storage whenever location.state.createdPosts changes
+  useEffect(() => {
+    if (location.state?.createdPosts) {
+      const updatedPosts = [...posts, ...location.state.createdPosts];
+      setPosts(updatedPosts);
+      localStorage.setItem("posts", JSON.stringify(updatedPosts));
+    }
+  }, [location.state?.createdPosts]);
 
-  let pageButtonsContent = [];
-  for (let i = 1; i <= countOfPages; i++) {
-    pageButtonsContent.push(i);
-  }
-
-  /*-----------------------------------------------------------------------------------------------------------------------------------------------------------*/
-
+  /*---------------------------------------------------------------------------------------------------------------------------------------------------*/
   /*---------------------------------------------------------------------------------------fetching from API----------------------------------------------- */
   useEffect(() => {
     let canceled = false;
@@ -62,7 +55,49 @@ export default function HomePage() {
 
   /*-----------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
+  /*-------------------------------------------------------------------Getting created posts from CreateANewPost component-------------------------------------*/
+
+  useEffect(() => {
+    if (location.state?.createdPosts) {
+      // setPostsFromCreatedPosts([
+      //   ...postsFromCreatedPosts,
+      //   ...location.state?.createdPosts,
+      // ]);
+
+      console.log(
+        JSON.stringify(location.state?.createdPosts) +
+          " location.state?.createdPosts in home page useEffect"
+      );
+    }
+
+    // console.log(
+    //   Array.isArray(postsFromCreatedPosts) +
+    //     " postsFromCreatedPosts in home page useEffect" +
+    //     JSON.stringify(postsFromCreatedPosts)
+    // );
+    // console.log(
+    //   Array.isArray(location.state?.createdPosts) +
+    //     JSON.stringify(location.state?.createdPosts) +
+    //     " location.state.createdPosts in home page useEffect"
+    // );
+  }, [location.state?.createdPosts.length]);
+
   /*----------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+  /*------------------------------------------------------------------creating pages------------------------------------------------------------------------*/
+
+  let indexOfTheLastPostOfThePage = pageNumber * postCountForASinglePage;
+  let indexOfTheFirstPostOfThePage =
+    indexOfTheLastPostOfThePage - postCountForASinglePage;
+  let postsForSinglePage = posts.slice(
+    indexOfTheFirstPostOfThePage,
+    indexOfTheLastPostOfThePage
+  );
+
+  let pageButtonsContent = [];
+  for (let i = 1; i <= countOfPages; i++) {
+    pageButtonsContent.push(i);
+  }
 
   useEffect(() => {
     const additionalPage = posts.length % postCountForASinglePage !== 0;
@@ -88,11 +123,6 @@ export default function HomePage() {
   //     console.log(JSON.stringify(postsForSinglePage) + " postsForSinglePage");
   //   }, [countOfPages, postsForSinglePage]);
 
-  /*----------------------------------------------------------------------------------------------------------------------------------------------------------*/
-
-  /*----------------------------------------------------------------------------------------------------------------------------------------------------------*/
-
-  /*----------------------------------------------------------------------------------------------------------------------------------------------------------*/
   function changeThePage(page) {
     setPageNumber(page);
   }
@@ -112,6 +142,12 @@ export default function HomePage() {
   //   useState(1);
   // const [indexOfTheLastPostOfThePage, setIndexOfTheLastPostOfThePage] =
   //   useState(10);
+
+  /*-----------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+  /*----------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+  /*----------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
   return (
     <div className=" flex posts-center justify-center align-center h-screen bg-gradient-to-r from-blue-200 to-purple-300">
@@ -139,7 +175,7 @@ export default function HomePage() {
           ))}
 
           {pageNumber === countOfPages &&
-            createdPosts.map((createdPost) => (
+            location.state?.createdPosts.map((createdPost) => (
               <div className="bg-red-500 mb-6 p-5 rounded-lg flex">
                 <div key={createdPost.name} className="mb-4 text-left">
                   <div className="text-gray-600 mb-1">

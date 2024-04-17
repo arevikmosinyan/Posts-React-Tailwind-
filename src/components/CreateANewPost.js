@@ -7,28 +7,45 @@ export default function CreateANewPost() {
   const [name, setName] = useState("");
   const [title, setTitle] = useState("");
   const [post, setPost] = useState("");
-  const [createdPost, setCreatedPost] = useState({});
-  console.log(post + " post");
-  console.log(name + " name");
-  console.log(title + " title");
+  const [createdPosts, setCreatedPosts] = useState([]);
+  const [initial, setInitial] = useState(true);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    setCreatedPost({ ...createdPost, name: name, title: title, post: post });
-  }, [name, title, post]);
+    const savedPosts = JSON.parse(localStorage.getItem("posts"));
+    if (savedPosts) {
+      setCreatedPosts(savedPosts);
+    }
+  }, []);
 
   function handleCancel() {
     console.log("canceled");
   }
 
   function handleDone() {
-    console.log("done");
-    navigate(HOME_ROUTE, { state: { createdPost } });
+    const newPost = { name: name, title: title, post: post };
+    setCreatedPosts([...createdPosts, newPost]);
     setName("");
     setTitle("");
     setPost("");
   }
+
+  console.log(JSON.stringify(createdPosts) + " createdPosts in CreateANewPost");
+
+  useEffect(() => {
+    if (initial) {
+      setInitial(false);
+    } else {
+      setTimeout(() => {
+        navigate(HOME_ROUTE, { state: { createdPosts: createdPosts } });
+        console.log(
+          "navigate createdPosts  From CreateANewPost" +
+            JSON.stringify(createdPosts)
+        );
+      }, 10000);
+    }
+  }, [createdPosts]);
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-r from-green-200 to-blue-300">
@@ -65,6 +82,9 @@ export default function CreateANewPost() {
           Done
         </button>
       </div>
+      {createdPosts.map((elem) => {
+        return <div>{JSON.stringify(elem)}</div>;
+      })}
     </div>
   );
 }
