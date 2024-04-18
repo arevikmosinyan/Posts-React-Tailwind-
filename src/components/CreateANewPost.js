@@ -1,14 +1,18 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { HOME_ROUTE } from "../constants/constant";
+import { HOME_ROUTE } from "../constants/routes";
+import ModalCancelConfirm from "./ModalCancelConfirm";
+import ModalDoneConfirm from "./ModalDoneConfirm";
 
 export default function CreateANewPost() {
   const [name, setName] = useState("");
   const [title, setTitle] = useState("");
-  const [post, setPost] = useState("");
+  const [body, setBody] = useState("");
   const [createdPosts, setCreatedPosts] = useState([]);
   const [initial, setInitial] = useState(true);
+  const [showCancelConfirmation, setShowCancelConfirmation] = useState(false);
+  const [showDoneConfirmation, setShowDoneConfirmation] = useState(false);
 
   const navigate = useNavigate();
 
@@ -19,18 +23,42 @@ export default function CreateANewPost() {
     }
   }, []);
 
-  function handleCancel() {
-    console.log("canceled");
+  /*-------------------------------------------pressing Cancel-----------------*/
+
+  function onCancelClick() {
+    setShowCancelConfirmation(true);
   }
 
-  function handleDone() {
-    const newPost = { name: name, title: title, post: post };
+  function handleCancelConfirmed() {
+    setName("");
+    setTitle("");
+    setBody("");
+    setShowCancelConfirmation(false);
+  }
+
+  /*----------------------------------------------------------------------------*/
+
+  /*-----------------------------------pressing Done ----------------------------*/
+
+  function onDoneClick() {
+    setShowDoneConfirmation(true);
+  }
+
+  function handleDoneConfirmed() {
+    const newPost = { name: name, title: title, body: body };
     setCreatedPosts([...createdPosts, newPost]);
     // navigate(HOME_ROUTE, { state: { createdPosts: createdPosts } });
     setName("");
     setTitle("");
-    setPost("");
+    setBody("");
+    setShowDoneConfirmation(false);
   }
+
+  function keepAdditing() {
+    setShowCancelConfirmation(false);
+    setShowDoneConfirmation(false);
+  }
+  /*----------------------------------------------------------------------------*/
 
   console.log(JSON.stringify(createdPosts) + " createdPosts in CreateANewPost");
 
@@ -65,27 +93,41 @@ export default function CreateANewPost() {
       <textarea
         className="w-96 h-40 border border-gray-700 rounded-md p-2 m-5"
         placeholder="Write your post here..."
-        value={post}
-        onChange={(e) => setPost(e.target.value)}
+        value={body}
+        onChange={(e) => setBody(e.target.value)}
       ></textarea>
-      <div>{post}</div>
+      <div>{body}</div>
       <div className="mt-4 flex justify-end">
         <button
           className="mr-2 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
-          onClick={handleCancel}
+          onClick={onCancelClick}
         >
           Cancel
         </button>
         <button
           className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-          onClick={handleDone}
+          onClick={onDoneClick}
         >
           Done
         </button>
       </div>
-      {createdPosts.map((elem) => {
+      {/* Cancel Confirmation Modal */}
+      {showCancelConfirmation && (
+        <ModalCancelConfirm
+          keepAdditing={keepAdditing}
+          handleCancelConfirmed={handleCancelConfirmed}
+        />
+      )}
+      {/* Done Confirmation Modal */}
+      {showDoneConfirmation && (
+        <ModalDoneConfirm
+          keepAdditing={keepAdditing}
+          handleDoneConfirmed={handleDoneConfirmed}
+        />
+      )}
+      {/* {createdPosts.map((elem) => {
         return <div>{JSON.stringify(elem)}</div>;
-      })}
+      })} */}
     </div>
   );
 }

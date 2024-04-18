@@ -1,7 +1,7 @@
 import React from "react";
 import { Disclosure } from "@headlessui/react";
 import { Link } from "react-router-dom";
-import { HOME_ROUTE, CREATE_ROUTE } from "../constants/constant";
+import { HOME_ROUTE, CREATE_ROUTE } from "../constants/routes";
 
 const navigation = [
   { name: "Home", href: `${HOME_ROUTE}` },

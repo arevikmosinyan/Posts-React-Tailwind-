@@ -1,9 +1,17 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import { useState } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { DETAILS_ROUTE } from "../constants/constant";
+import { DETAILS_ROUTE } from "../constants/routes";
+import {
+  BUTTON_COLOR,
+  POST_BACKGROUND_COLOR,
+  LABELS_COLOR,
+  TEXT_COLOR,
+  HOVER_BUTTON,
+} from "../constants/colors";
+import newBodyContext from "../context/newBodyContext";
 
 export default function HomePage() {
   const [posts, setPosts] = useState([]);
@@ -13,6 +21,12 @@ export default function HomePage() {
   const [additionalPage, setAdditionalPage] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const context = useContext(newBodyContext);
+
+  console.log(JSON.stringify(context) + " context");
+  /*
+{"newBody":"et iusto sed quo iure\nvoluptatem occaecati omnis eligendi aut ad\nvoluptatem doloribus vel accusantium quis pariatur\n55555555555555"} context
+  */
 
   /*------------------------------------------------------------local Storage----------------------------------------------------------------------*/
 
@@ -41,6 +55,7 @@ export default function HomePage() {
       .then((posts) => {
         if (!canceled) {
           setPosts(posts);
+          console.log(JSON.stringify(posts) + " posts from API");
         }
       })
       .catch((error) => console.log(error.message));
@@ -110,19 +125,32 @@ export default function HomePage() {
       <div className="flex flex-col justify-center">
         <div className="p-6 h-[75vh] w-[70vw] flex flex-col justify-center overflow-y-auto overflow-x-auto bg-white bg-opacity-40 rounded-lg">
           {postsForSinglePage.map((post) => (
-            <div className="bg-red-500 mb-6 p-5 rounded-lg flex">
-              <div key={post.id} className="mb-4 text-left">
-                <div className="text-gray-600 mb-1">User ID: {post.id}</div>
-                <div className="text-blue-700 font-bold mb-1">
-                  Title: {post.title}
+            <div
+              className={`${POST_BACKGROUND_COLOR} mb-6 p-5 rounded-lg flex`}
+            >
+              <div key={post.id} className="my-4 text-left">
+                <div className="font-bold my-1 flex">
+                  <p className={`${LABELS_COLOR}`}>User ID: </p>
+                  <p className={`${TEXT_COLOR} mx-3`}>{post.userId}</p>
                 </div>
-                <div className="text-gray-800">{post.body}</div>
+                <div className="font-bold my-1 flex">
+                  <p className={`${LABELS_COLOR}`}>Title: </p>
+                  <p className={`${TEXT_COLOR} mx-3`}> {post.title}</p>
+                </div>
+
+                {context && context.idOfNewBody === post.id ? (
+                  <div className={`${TEXT_COLOR}`}>{context.newBody}</div>
+                ) : (
+                  <div className={`${TEXT_COLOR}`}>{post.body}</div>
+                )}
               </div>
 
               <div>
                 <button
-                  className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-                  onClick={() => navigate(DETAILS_ROUTE)}
+                  className={`px-4 py-2 ${BUTTON_COLOR} text-white rounded hover:${HOVER_BUTTON}`}
+                  onClick={() =>
+                    navigate(DETAILS_ROUTE, { state: { post: post } })
+                  }
                 >
                   Detailes
                 </button>
@@ -140,12 +168,12 @@ export default function HomePage() {
                   <div className="text-blue-700 font-bold mb-1">
                     Title: {createdPost.title}
                   </div>
-                  <div className="text-gray-800">{createdPost.post}</div>
+                  <div className="text-gray-800">{createdPost.body}</div>
                 </div>
 
                 <div>
                   <button
-                    className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                    className={`px-4 py-2 ${BUTTON_COLOR} text-white rounded hover:${HOVER_BUTTON}`}
                     onClick={() =>
                       navigate(DETAILS_ROUTE, { state: { post: createdPost } })
                     }
