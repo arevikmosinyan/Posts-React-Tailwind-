@@ -12,10 +12,6 @@ import { useState } from "react";
 function App() {
   const [newBody, setNewBody] = useState("");
   const [idOfNewBody, setIdOfNewBody] = useState("");
-  console.log(newBody + " newBody");
-  console.log(idOfNewBody + " idOfNewBody");
-  console.log(setIdOfNewBody + " setIdOfNewBody");
-  console.log(setNewBody + " setNewBody");
 
   return (
     <newBodyContext.Provider
