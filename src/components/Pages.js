@@ -3,14 +3,14 @@ import { useState, useEffect } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
 
 export default function Pages({ posts, handleDataFromChildPages }) {
-  const [postCountForASinglePage, setPostCountForASinglePage] = useState(6);
+  const [postCountForASinglePage, setPostCountForASinglePage] = useState(5);
   const [additionalPage, setAdditionalPage] = useState(false);
   const [pageNumber, setPageNumber] = useState(1);
   const [countOfPages, setCountOfPages] = useState(0);
-  const [indexOfTheLastPostOfThePage, setIndexOfTheLastPostOfThePage] =
-    useState(6);
   const [indexOfTheFirstPostOfThePage, setIndexOfTheFirstPostOfThePage] =
-    useState(1);
+    useState(0);
+  const [indexOfTheLastPostOfThePage, setIndexOfTheLastPostOfThePage] =
+    useState(5);
   const [postsForSinglePage, setPostsForSinglePage] = useState(
     posts.slice(indexOfTheFirstPostOfThePage, indexOfTheLastPostOfThePage)
   );
@@ -18,11 +18,13 @@ export default function Pages({ posts, handleDataFromChildPages }) {
 
   useEffect(() => {
     setIndexOfTheFirstPostOfThePage(
-      indexOfTheLastPostOfThePage - postCountForASinglePage
+      indexOfTheFirstPostOfThePage + postCountForASinglePage
     );
-    setIndexOfTheLastPostOfThePage(pageNumber * postCountForASinglePage);
+    setIndexOfTheLastPostOfThePage(
+      indexOfTheFirstPostOfThePage + postCountForASinglePage
+    );
     setPostsForSinglePage(postsForSinglePage);
-    handleDataFromChildPages(postsForSinglePage);
+    // handleDataFromChildPages(postsForSinglePage);
   }, [pageNumber, postCountForASinglePage]);
 
   // console.log(
@@ -31,9 +33,9 @@ export default function Pages({ posts, handleDataFromChildPages }) {
   // console.log(JSON.stringify(posts) + " posts in Pages");
   /*----------------------------------------------------------sending data to Home page-----------------------------------------------------------------------*/
 
-  useEffect(() => {
-    handleDataFromChildPages(postsForSinglePage);
-  }, [postsForSinglePage]);
+  // useEffect(() => {
+  //   handleDataFromChildPages(postsForSinglePage);
+  // }, [postsForSinglePage]);
 
   /*---------------------------------------------------------------------------------------------------------------------------------------------------------*/
 

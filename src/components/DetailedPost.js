@@ -8,24 +8,57 @@ import {
 } from "../constants/colors";
 import { useLocation } from "react-router-dom";
 import newBodyContext from "../context/newBodyContext";
+import ModalDeleteConfirm from "././Modals/ModalDeleteConfirm";
+import { useNavigate } from "react-router-dom";
+import { HOME_ROUTE } from "../constants/routes";
+import idContextOfDeletingPost from "../context/deletingPostContext";
 
 export default function DetailedPost() {
   const location = useLocation();
   const [newBody, setNewBody] = useState(location.state?.post.body);
   const [idOfNewBody, setIdOfNewBody] = useState(location.state?.post.id);
-  const context = useContext(newBodyContext);
+  // const [setIdOfDeleteingPost,setIdOfDeleteingPost]=useState(location.state?.post.id)
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const navigate = useNavigate();
+
+  const contextOfNewBody = useContext(newBodyContext);
+  const contextOfDeletingPost = useContext(idContextOfDeletingPost);
 
   function handleEdit() {
-    context.setNewBody(newBody);
-    context.setIdOfNewBody(idOfNewBody);
+    contextOfNewBody.setNewBody(newBody);
+    contextOfNewBody.setIdOfNewBody(idOfNewBody);
   }
+
+  /*----------------------------------------------------------Delete button-------------------------------------------------------------*/
+  function onDeleteClick() {
+    setShowDeleteConfirmation(true);
+  }
+
+  function handleCancelTheDeleting() {
+    setShowDeleteConfirmation(false);
+  }
+
+  function handleConfirmDeleting() {
+    contextOfDeletingPost.setIdOfDeleteingPost(location.state?.post.id);
+    navigate(HOME_ROUTE);
+    setShowDeleteConfirmation(false);
+  }
+
+  /*------------------------------------------------------------------------------------------------------------------------------------*/
 
   return (
     <>
       <div className=" flex flex-col posts-center   h-screen bg-gradient-to-r from-blue-200 to-purple-300">
+        {showDeleteConfirmation && (
+          <ModalDeleteConfirm
+            handleCancelTheDeleting={handleCancelTheDeleting}
+            handleConfirmDeleting={handleConfirmDeleting}
+          />
+        )}
         <div className="flex justify-end m-10">
           <button
             className={`px-4 py-2 ${BUTTON_COLOR} text-white rounded hover:${HOVER_BUTTON} `}
+            onClick={onDeleteClick}
           >
             Delete the post
           </button>
@@ -37,6 +70,10 @@ export default function DetailedPost() {
             <div className="m-8">
               <p className={`${LABELS_COLOR} font-bold mb-1`}> Title:</p>
               <p className={`${TEXT_COLOR} `}>{location.state?.post.title}</p>
+            </div>
+            <div className="m-8">
+              <p className={`${LABELS_COLOR} font-bold mb-1`}> post id:</p>
+              <p className={`${TEXT_COLOR} `}>{location.state?.post.id}</p>
             </div>
             {location.state?.post.userId && (
               <div className="my-5 ">

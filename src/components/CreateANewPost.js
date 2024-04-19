@@ -2,8 +2,8 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { HOME_ROUTE } from "../constants/routes";
-import ModalCancelConfirm from "./ModalCancelConfirm";
-import ModalDoneConfirm from "./ModalDoneConfirm";
+import ModalCancelConfirm from "././Modals/ModalCancelConfirm";
+import ModalDoneConfirm from "././Modals/ModalDoneConfirm";
 
 export default function CreateANewPost() {
   const [name, setName] = useState("");
@@ -111,14 +111,12 @@ export default function CreateANewPost() {
           Done
         </button>
       </div>
-      {/* Cancel Confirmation Modal */}
       {showCancelConfirmation && (
         <ModalCancelConfirm
           keepAdditing={keepAdditing}
           handleCancelConfirmed={handleCancelConfirmed}
         />
       )}
-      {/* Done Confirmation Modal */}
       {showDoneConfirmation && (
         <ModalDoneConfirm
           keepAdditing={keepAdditing}
