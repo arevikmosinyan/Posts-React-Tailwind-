@@ -1,4 +1,4 @@
-import { createContext } from "react";
+import { createContext } from 'react';
 
-const idContextOfDeletingPost = createContext();
-export default idContextOfDeletingPost;
+const idOfDeletingPostContext = createContext();
+export default idOfDeletingPostContext;
