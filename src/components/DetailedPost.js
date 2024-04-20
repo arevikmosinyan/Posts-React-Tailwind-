@@ -7,49 +7,49 @@ import {
   HOVER_BUTTON,
 } from '../constants/colors';
 import { useLocation } from 'react-router-dom';
-import newBodyContext from '../context/newBodyContext';
 import ModalDeleteConfirm from '././Modals/ModalDeleteConfirm';
 import { useNavigate } from 'react-router-dom';
 import { HOME_ROUTE } from '../constants/routes';
-import idOfDeletingPostContext from '../context/deletingPostContext';
+
+import postsContext from '../context/postsContext';
 
 export default function DetailedPost() {
   const location = useLocation();
-  const [newBody, setNewBody] = useState(location.state?.post.body);
-  const [idOfNewBody, setIdOfNewBody] = useState(location.state?.post.id);
-  // const [setIdOfDeleteingPost,setIdOfDeleteingPost]=useState(location.state?.post.id)
-  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const { setPosts } = useContext(postsContext);
+  const { posts } = useContext(postsContext);
+  const [bodyOfPost, setBodyOfPost] = useState(location.state?.post.body);
+  const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false);
   const navigate = useNavigate();
 
-  const newBodyFromContext = useContext(newBodyContext);
-  const idOfDeletingPostFromContext = useContext(idOfDeletingPostContext);
-
   function handleEdit() {
-    newBodyFromContext.setNewBody(newBody);
-    newBodyFromContext.setIdOfNewBody(idOfNewBody);
+    setPosts(
+      posts.map((post) => {
+        if (post.id === location.state?.post.id) {
+          post.body = bodyOfPost;
+        }
+        return post;
+      }),
+    );
   }
 
-  /*----------------------------------------------------------Delete button-------------------------------------------------------------*/
   function onDeleteClick() {
-    setShowDeleteConfirmation(true);
+    setOpenDeleteConfirmation(true);
   }
 
   function handleCancelTheDeleting() {
-    setShowDeleteConfirmation(false);
+    setOpenDeleteConfirmation(false);
   }
 
   function handleConfirmDeleting() {
-    idOfDeletingPostFromContext.setIdOfDeleteingPost(location.state?.post.id);
+    setPosts(posts.filter((post) => post.id !== location.state?.post.id));
     navigate(HOME_ROUTE);
-    setShowDeleteConfirmation(false);
+    setOpenDeleteConfirmation(false);
   }
-
-  /*------------------------------------------------------------------------------------------------------------------------------------*/
 
   return (
     <>
       <div className=' flex flex-col posts-center   h-screen bg-gradient-to-r from-blue-200 to-purple-300'>
-        {showDeleteConfirmation && (
+        {openDeleteConfirmation && (
           <ModalDeleteConfirm
             handleCancelTheDeleting={handleCancelTheDeleting}
             handleConfirmDeleting={handleConfirmDeleting}
@@ -92,12 +92,12 @@ export default function DetailedPost() {
 
             <div className='my-5'>
               <p className={`${LABELS_COLOR} font-bold mb-1`}>Post:</p>
-              <p className={`${TEXT_COLOR} `}>{newBody}</p>
+              <p className={`${TEXT_COLOR} `}>{bodyOfPost}</p>
               <textarea
                 className='w-96 h-40 border border-gray-700 rounded-md p-2 m-5'
                 placeholder='Change your post here...'
-                value={newBody}
-                onChange={(e) => setNewBody(e.target.value)}></textarea>
+                value={bodyOfPost}
+                onChange={(e) => setBodyOfPost(e.target.value)}></textarea>
 
               <button
                 className={`px-4 py-2 ${BUTTON_COLOR} text-white rounded hover:${HOVER_BUTTON}`}
