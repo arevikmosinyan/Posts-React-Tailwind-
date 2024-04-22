@@ -1,9 +1,11 @@
-import React, { useEffect } from "react";
-import { useState } from "react";
+import React from "react";
+import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { HOME_ROUTE } from "../constants/routes";
 import ModalCancelConfirm from "././Modals/ModalCancelConfirm";
 import ModalDoneConfirm from "././Modals/ModalDoneConfirm";
+import postsContext from "../context/postsContext";
+import { v4 as uuidv4 } from "uuid";
 
 export default function CreateANewPost() {
   const [name, setName] = useState("");
@@ -13,15 +15,10 @@ export default function CreateANewPost() {
   const [initial, setInitial] = useState(true);
   const [showCancelConfirmation, setShowCancelConfirmation] = useState(false);
   const [showDoneConfirmation, setShowDoneConfirmation] = useState(false);
+  const { posts } = useContext(postsContext);
+  const { setPosts } = useContext(postsContext);
 
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const savedPosts = JSON.parse(localStorage.getItem("posts"));
-    if (savedPosts) {
-      setCreatedPosts(savedPosts);
-    }
-  }, []);
 
   /*-------------------------------------------pressing Cancel-----------------*/
 
@@ -45,9 +42,9 @@ export default function CreateANewPost() {
   }
 
   function handleDoneConfirmed() {
-    const newPost = { name: name, title: title, body: body };
-    setCreatedPosts([...createdPosts, newPost]);
-    // navigate(HOME_ROUTE, { state: { createdPosts: createdPosts } });
+    const newPost = { name: name, title: title, body: body, id: uuidv4() };
+    setPosts([...posts, newPost]);
+    navigate(HOME_ROUTE);
     setName("");
     setTitle("");
     setBody("");
@@ -59,22 +56,6 @@ export default function CreateANewPost() {
     setShowDoneConfirmation(false);
   }
   /*----------------------------------------------------------------------------*/
-
-  console.log(JSON.stringify(createdPosts) + " createdPosts in CreateANewPost");
-
-  useEffect(() => {
-    if (initial) {
-      setInitial(false);
-    } else {
-      setTimeout(() => {
-        navigate(HOME_ROUTE, { state: { createdPosts: createdPosts } });
-        console.log(
-          "navigate createdPosts  From CreateANewPost" +
-            JSON.stringify(createdPosts)
-        );
-      }, 10000);
-    }
-  }, [createdPosts]);
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-r from-green-200 to-blue-300">
@@ -96,7 +77,6 @@ export default function CreateANewPost() {
         value={body}
         onChange={(e) => setBody(e.target.value)}
       ></textarea>
-      <div>{body}</div>
       <div className="mt-4 flex justify-end">
         <button
           className="mr-2 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
@@ -123,9 +103,6 @@ export default function CreateANewPost() {
           handleDoneConfirmed={handleDoneConfirmed}
         />
       )}
-      {/* {createdPosts.map((elem) => {
-        return <div>{JSON.stringify(elem)}</div>;
-      })} */}
     </div>
   );
 }
