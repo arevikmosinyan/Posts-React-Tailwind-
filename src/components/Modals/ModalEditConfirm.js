@@ -12,6 +12,7 @@ export default function ModalEditConfirm({
   handleConfirmEditing,
   bodyOfPost,
   handleNewBodyFromModalEdit,
+  pageNumber,
 }) {
   const [newBody, setNewBody] = useState("");
 

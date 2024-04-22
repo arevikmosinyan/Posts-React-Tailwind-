@@ -3,6 +3,7 @@ import React from "react";
 export default function ModalDeleteConfirm({
   handleCancelTheDeleting,
   handleConfirmDeleting,
+  pageNumber,
 }) {
   return (
     <div className="fixed z-10 inset-0 overflow-y-auto">
