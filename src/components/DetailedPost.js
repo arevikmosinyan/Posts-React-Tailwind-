@@ -62,6 +62,8 @@ export default function DetailedPost() {
             handleModalConfirm={deleteModal.closeModal}
             handleModalCancel={handleConfirmDeleting}
             modalText="Are you sure you want to delete this post?"
+            confirmButtonText="Yes, delete"
+            cancelButtonText="No"
           />
         )}
         <div className="flex m-10 items-start">

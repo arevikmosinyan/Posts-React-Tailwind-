@@ -72,6 +72,8 @@ export default function CreateANewPost() {
           handleModalConfirm={handleDoneConfirmed}
           handleModalCancel={handleCancelConfirmed}
           modalText="Are you sure you want to add this post?"
+          confirmButtonText="Yes, create"
+          cancelButtonText="No, skip"
         />
       )}
     </div>

@@ -61,6 +61,8 @@ export default function Comments({ userId }) {
               handleModalConfirm={onAddComment}
               handleModalCancel={onCancelComment}
               modalText="Are you sure you want to add this comment?"
+              confirmButtonText="Yes, add"
+              cancelButtonText="No, skip"
             />
           )}
           <div className=" flex m-7 items-center">
@@ -76,6 +78,8 @@ export default function Comments({ userId }) {
           <SharedModal
             handleModalConfirm={onDeleteCommentConfirm}
             handleModalCancel={onCancelComment}
+            confirmButtonText="Yes, delete"
+            cancelButtonText="No"
           />
         )}
         <ul className="list-none">
