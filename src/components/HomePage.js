@@ -4,7 +4,6 @@ import postsContext from "../context/postsContext";
 import { DETAILS_ROUTE } from "../constants/routes";
 import { v4 as uuidv4 } from "uuid";
 import {
-  BUTTON_COLOR,
   POST_BACKGROUND_COLOR,
   LABELS_COLOR,
   TEXT_COLOR,

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useRef } from "react";
+import React from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
 import { v4 as uuidv4 } from "uuid";
 
@@ -41,21 +41,6 @@ export default function Pages({
             {pageButton}
           </button>
         ))}
-        {/* {pageButtonsContent.map((pageButton, indexOfButton) => {
-          return (
-            <button
-              key={uuidv4()}
-              onClick={() => changeThePage(indexOfButton + 1)}
-              className={`relative inline-flex posts-center ${
-                indexOfButton + 1 === pageNumber
-                  ? "bg-gray-800  text-white focus-visible:outline focus-visible:outline-5 focus-visible:outline-offset-2 focus-visible:outline-red-600"
-                  : "text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0"
-              } bg-gray-500 px-4 py-2  text-sm font-semibold`}
-            >
-              {pageButton}
-            </button>
-          );
-        })} */}
         <button
           onClick={nextPage}
           disabled={pageNumber === countOfPages}
@@ -65,16 +50,6 @@ export default function Pages({
         >
           <ChevronRightIcon className="h-5 w-5" />
         </button>
-        {/* <button
-          onClick={nextPage}
-          disabled={indexOfTheLastPostOfThePage == posts?.length}
-          className={`relative inline-flex bg-gray-800 posts-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 ${
-            indexOfTheLastPostOfThePage >= posts?.length &&
-            "opacity-50 cursor-not-allowed"
-          }`}
-        >
-          <ChevronRightIcon className="h-5 w-5" />
-        </button> */}
       </nav>
     </>
   );

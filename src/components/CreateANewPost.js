@@ -2,7 +2,6 @@ import React from "react";
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { HOME_ROUTE } from "../constants/routes";
-//import ModalDoneConfirm from "././Modals/ModalDoneConfirm";
 import useModal from "../customHooks/useModal";
 import { BUTTON_COLOR, HOVER_BUTTON } from "../constants/colors";
 import postsContext from "../context/postsContext";
@@ -69,13 +68,10 @@ export default function CreateANewPost() {
         </button>
       </div>
       {doneModal.isOpen && (
-        // <ModalDoneConfirm
-        //   handleDoneConfirmed={handleDoneConfirmed}
-        //   handleCancelConfirmed={handleCancelConfirmed}
-        // />
         <SharedModal
           handleModalConfirm={handleDoneConfirmed}
           handleModalCancel={handleCancelConfirmed}
+          modalText="Are you sure you want to add this post?"
         />
       )}
     </div>

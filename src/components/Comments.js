@@ -6,8 +6,6 @@ import {
   TEXT_COLOR,
 } from "../constants/colors";
 import useModal from "../customHooks/useModal";
-//import ModalCommentDeleteConfirm from "./Modals/ModalCommentDelete";
-//import ModalCommentAddConfirm from "./Modals/ModalCommentAddConfirm";
 import SharedModal from "./Modals/SharedModal";
 
 export default function Comments({ userId }) {
@@ -59,13 +57,10 @@ export default function Comments({ userId }) {
             ></textarea>
           </div>
           {addCommentModal.isOpen && (
-            // <ModalCommentAddConfirm
-            //   handleConfirmAdding={onAddComment}
-            //   handleCancelAdding={onCancelComment}
-            // />
             <SharedModal
               handleModalConfirm={onAddComment}
               handleModalCancel={onCancelComment}
+              modalText="Are you sure you want to add this comment?"
             />
           )}
           <div className=" flex m-7 items-center">
@@ -78,11 +73,6 @@ export default function Comments({ userId }) {
           </div>
         </div>
         {deleteCommentModal.isOpen && (
-          // <ModalCommentDeleteConfirm
-
-          //   handleConfirmDeleting={onDeleteCommentConfirm}
-          //   handleCancelTheDeleting={onCancelComment}
-          // />
           <SharedModal
             handleModalConfirm={onDeleteCommentConfirm}
             handleModalCancel={onCancelComment}
@@ -90,7 +80,7 @@ export default function Comments({ userId }) {
         )}
         <ul className="list-none">
           {allComments.map((comment, index) => {
-            if (index >= 3 && !showAllComments) {
+            if (index >= 2 && !showAllComments) {
               return null;
             }
 
@@ -99,9 +89,7 @@ export default function Comments({ userId }) {
                 key={uuidv4()}
                 className={`${COMMENT_BACKGROUND} flex justify-between items-center w-30vw break-words mb-4 p-4 rounded-lg`}
               >
-                <p className="font-bold indent-4 text-justify">
-                  Comment by {userId} :
-                </p>
+                <p className="indent-4 text-justify">Comment by {userId} :</p>
                 <p className="indent-4 text-justify">{comment}</p>
                 <button
                   className={`mt-2 px-3 py-1 ${BUTTON_LIGHT_COLOR} text-white rounded `}
@@ -115,7 +103,7 @@ export default function Comments({ userId }) {
               </li>
             );
           })}
-          {allComments.length > 3 && (
+          {allComments.length > 2 && (
             <span
               className={`mt-2 px-3 py-1 ${TEXT_COLOR} rounded cursor-pointer underline`}
               onClick={() => setShowAllComments(!showAllComments)}
