@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
 import { v4 as uuidv4 } from "uuid";
 
@@ -9,10 +9,13 @@ export default function Pages({
   nextPage,
   changeThePage,
 }) {
-  let pageButtonsContent = [];
-  for (let i = 1; i <= countOfPages; i++) {
-    pageButtonsContent.push(i);
-  }
+  const pageButtonsContent = useMemo(() => {
+    let buttons = [];
+    for (let i = 1; i <= countOfPages; i++) {
+      buttons.push(i);
+    }
+    return buttons;
+  }, [countOfPages]);
   return (
     <>
       <nav

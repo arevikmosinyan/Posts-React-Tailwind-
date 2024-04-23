@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import {
   COMMENT_BACKGROUND,
   BUTTON_LIGHT_COLOR,
+  BUTTON_DISABLED,
   TEXT_COLOR,
 } from "../constants/colors";
 import useModal from "../customHooks/useModal";
@@ -13,13 +14,20 @@ export default function Comments({ userId }) {
   const [allComments, setAllComments] = useState([]);
   const [indexOfComment, setIndexOfComment] = useState();
   const [showAllComments, setShowAllComments] = useState(false);
+  const [commentIsField, setCommentIsField] = useState(false);
   const addCommentModal = useModal();
   const deleteCommentModal = useModal();
+
+  useEffect(() => {
+    if (commentText.trim() !== "") {
+      setCommentIsField(true);
+    }
+  }, [commentText]);
 
   function onAddComment() {
     setAllComments([...allComments, commentText].reverse());
     addCommentModal.closeModal();
-    setCommentText("");
+    resetStates();
   }
 
   //   function handleKeyDown(event) {
@@ -32,7 +40,7 @@ export default function Comments({ userId }) {
   function onCancelComment() {
     deleteCommentModal.closeModal();
     addCommentModal.closeModal();
-    setCommentText("");
+    resetStates();
   }
 
   function onDeleteCommentConfirm() {
@@ -41,6 +49,11 @@ export default function Comments({ userId }) {
     );
     setAllComments(updatedAllComments);
     deleteCommentModal.closeModal();
+  }
+
+  function resetStates() {
+    setCommentText("");
+    setCommentIsField(false);
   }
 
   return (
@@ -65,9 +78,12 @@ export default function Comments({ userId }) {
               cancelButtonText="No, skip"
             />
           )}
-          <div className=" flex m-7 items-center">
+          <div className=" flex ml-7 mt-7 items-center">
             <button
-              className={`px-4 py-2 ${BUTTON_LIGHT_COLOR} text-white border border-gray-500 rounded `}
+              disabled={!commentIsField}
+              className={`px-4 py-2 ${
+                !commentIsField ? BUTTON_DISABLED : BUTTON_LIGHT_COLOR
+              } text-white border border-gray-500 rounded `}
               onClick={() => addCommentModal.openModal()}
             >
               Add
@@ -87,7 +103,6 @@ export default function Comments({ userId }) {
             if (index >= 2 && !showAllComments) {
               return null;
             }
-
             return (
               <li
                 key={uuidv4()}

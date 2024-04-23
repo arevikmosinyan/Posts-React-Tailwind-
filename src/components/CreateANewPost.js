@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { HOME_ROUTE } from "../constants/routes";
 import useModal from "../customHooks/useModal";
-import { BUTTON_COLOR, HOVER_BUTTON } from "../constants/colors";
+import {
+  BUTTON_COLOR,
+  HOVER_BUTTON,
+  BUTTON_DISABLED,
+} from "../constants/colors";
 import postsContext from "../context/postsContext";
 import { v4 as uuidv4 } from "uuid";
 import SharedModal from "./Modals/SharedModal";
@@ -12,11 +16,18 @@ export default function CreateANewPost() {
   const [name, setName] = useState("");
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
+  const [allFieldsAreFilled, setAllFieldsAreFilled] = useState(false);
   const [wasEdited, setWasEdited] = useState(true);
   const { posts } = useContext(postsContext);
   const { setPosts } = useContext(postsContext);
   const navigate = useNavigate();
   const doneModal = useModal();
+
+  useEffect(() => {
+    if (name.trim() !== "" && title.trim() !== "" && body.trim() !== "") {
+      setAllFieldsAreFilled(true);
+    }
+  }, [name, title, body]);
 
   function handleCancelConfirmed() {
     resetStates();
@@ -37,6 +48,7 @@ export default function CreateANewPost() {
     setName("");
     setTitle("");
     setBody("");
+    setAllFieldsAreFilled(false);
   }
 
   return (
@@ -61,7 +73,10 @@ export default function CreateANewPost() {
       ></textarea>
       <div className="mt-4 flex justify-end">
         <button
-          className={`px-4 py-2 ${BUTTON_COLOR} text-white rounded hover:${HOVER_BUTTON}`}
+          disabled={!allFieldsAreFilled}
+          className={` px-4 py-2 ${
+            !allFieldsAreFilled ? BUTTON_DISABLED : BUTTON_COLOR
+          }  text-white rounded hover:${HOVER_BUTTON} `}
           onClick={() => doneModal.openModal()}
         >
           Done
