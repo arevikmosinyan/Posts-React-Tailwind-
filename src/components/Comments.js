@@ -6,8 +6,9 @@ import {
   TEXT_COLOR,
 } from "../constants/colors";
 import useModal from "../customHooks/useModal";
-import ModalCommentDeleteConfirm from "./Modals/ModalCommentDelete";
-import ModalCommentAddConfirm from "./Modals/ModalCommentAddConfirm";
+//import ModalCommentDeleteConfirm from "./Modals/ModalCommentDelete";
+//import ModalCommentAddConfirm from "./Modals/ModalCommentAddConfirm";
+import SharedModal from "./Modals/SharedModal";
 
 export default function Comments({ userId }) {
   const [commentText, setCommentText] = useState("");
@@ -58,9 +59,13 @@ export default function Comments({ userId }) {
             ></textarea>
           </div>
           {addCommentModal.isOpen && (
-            <ModalCommentAddConfirm
-              handleConfirmAdding={onAddComment}
-              handleCancelAdding={onCancelComment}
+            // <ModalCommentAddConfirm
+            //   handleConfirmAdding={onAddComment}
+            //   handleCancelAdding={onCancelComment}
+            // />
+            <SharedModal
+              handleModalConfirm={onAddComment}
+              handleModalCancel={onCancelComment}
             />
           )}
           <div className=" flex m-7 items-center">
@@ -73,9 +78,14 @@ export default function Comments({ userId }) {
           </div>
         </div>
         {deleteCommentModal.isOpen && (
-          <ModalCommentDeleteConfirm
-            handleConfirmDeleting={onDeleteCommentConfirm}
-            handleCancelTheDeleting={onCancelComment}
+          // <ModalCommentDeleteConfirm
+
+          //   handleConfirmDeleting={onDeleteCommentConfirm}
+          //   handleCancelTheDeleting={onCancelComment}
+          // />
+          <SharedModal
+            handleModalConfirm={onDeleteCommentConfirm}
+            handleModalCancel={onCancelComment}
           />
         )}
         <ul className="list-none">
@@ -105,7 +115,7 @@ export default function Comments({ userId }) {
               </li>
             );
           })}
-          {allComments.length >= 3 && (
+          {allComments.length > 3 && (
             <span
               className={`mt-2 px-3 py-1 ${TEXT_COLOR} rounded cursor-pointer underline`}
               onClick={() => setShowAllComments(!showAllComments)}

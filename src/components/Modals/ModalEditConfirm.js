@@ -1,18 +1,11 @@
 import React, { useEffect, useState } from "react";
-import {
-  BUTTON_COLOR,
-  POST_BACKGROUND_COLOR,
-  LABELS_COLOR,
-  TEXT_COLOR,
-  HOVER_BUTTON,
-} from "../../constants/colors";
-
+import { BUTTON_COLOR, HOVER_BUTTON } from "../../constants/colors";
+//in Detailes post editing, changing the post
 export default function ModalEditConfirm({
-  handleCancelTheEditing,
   handleConfirmEditing,
+  handleCancelTheEditing,
   bodyOfPost,
   handleNewBodyFromModalEdit,
-  pageNumber,
 }) {
   const [newBody, setNewBody] = useState("");
 

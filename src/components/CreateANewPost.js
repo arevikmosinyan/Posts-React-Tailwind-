@@ -2,41 +2,26 @@ import React from "react";
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { HOME_ROUTE } from "../constants/routes";
-import ModalCancelConfirm from "././Modals/ModalCancelConfirm";
-import ModalDoneConfirm from "././Modals/ModalDoneConfirm";
-import {
-  BUTTON_COLOR,
-  BUTTON_LIGHT_COLOR,
-  HOVER_BUTTON,
-  HOVER_BUTTON_LIGHT,
-} from "../constants/colors";
+//import ModalDoneConfirm from "././Modals/ModalDoneConfirm";
+import useModal from "../customHooks/useModal";
+import { BUTTON_COLOR, HOVER_BUTTON } from "../constants/colors";
 import postsContext from "../context/postsContext";
 import { v4 as uuidv4 } from "uuid";
+import SharedModal from "./Modals/SharedModal";
 
 export default function CreateANewPost() {
   const [name, setName] = useState("");
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [wasEdited, setWasEdited] = useState(true);
-  const [showCancelConfirmation, setShowCancelConfirmation] = useState(false);
-  const [showDoneConfirmation, setShowDoneConfirmation] = useState(false);
   const { posts } = useContext(postsContext);
   const { setPosts } = useContext(postsContext);
   const navigate = useNavigate();
-
-  function onCancelClick() {
-    setShowCancelConfirmation(true);
-  }
-
-  function onDoneClick() {
-    setShowDoneConfirmation(true);
-  }
+  const doneModal = useModal();
 
   function handleCancelConfirmed() {
-    setName("");
-    setTitle("");
-    setBody("");
-    setShowCancelConfirmation(false);
+    resetStates();
+    doneModal.closeModal();
   }
 
   function handleDoneConfirmed() {
@@ -45,16 +30,14 @@ export default function CreateANewPost() {
     navigate(HOME_ROUTE, {
       state: { wasEdited: wasEdited },
     });
+    resetStates();
+    doneModal.closeModal();
+  }
 
+  function resetStates() {
     setName("");
     setTitle("");
     setBody("");
-    setShowDoneConfirmation(false);
-  }
-
-  function keepAdditing() {
-    setShowCancelConfirmation(false);
-    setShowDoneConfirmation(false);
   }
 
   return (
@@ -79,28 +62,20 @@ export default function CreateANewPost() {
       ></textarea>
       <div className="mt-4 flex justify-end">
         <button
-          className={`mr-2 px-4 py-2 ${BUTTON_LIGHT_COLOR} text-white rounded hover:${HOVER_BUTTON_LIGHT}`}
-          onClick={onCancelClick}
-        >
-          Cancel
-        </button>
-        <button
           className={`px-4 py-2 ${BUTTON_COLOR} text-white rounded hover:${HOVER_BUTTON}`}
-          onClick={onDoneClick}
+          onClick={() => doneModal.openModal()}
         >
           Done
         </button>
       </div>
-      {showCancelConfirmation && (
-        <ModalCancelConfirm
-          keepAdditing={keepAdditing}
-          handleCancelConfirmed={handleCancelConfirmed}
-        />
-      )}
-      {showDoneConfirmation && (
-        <ModalDoneConfirm
-          keepAdditing={keepAdditing}
-          handleDoneConfirmed={handleDoneConfirmed}
+      {doneModal.isOpen && (
+        // <ModalDoneConfirm
+        //   handleDoneConfirmed={handleDoneConfirmed}
+        //   handleCancelConfirmed={handleCancelConfirmed}
+        // />
+        <SharedModal
+          handleModalConfirm={handleDoneConfirmed}
+          handleModalCancel={handleCancelConfirmed}
         />
       )}
     </div>

@@ -7,13 +7,14 @@ import {
   HOVER_BUTTON,
 } from "../constants/colors";
 import { useLocation } from "react-router-dom";
-import ModalDeleteConfirm from "././Modals/ModalDeleteConfirm";
+//import ModalDeleteConfirm from "././Modals/ModalDeleteConfirm";
 import ModalEditConfirm from "././Modals/ModalEditConfirm";
 import Comments from "./Comments";
 import { useNavigate } from "react-router-dom";
 import { HOME_ROUTE } from "../constants/routes";
 import useModal from "../customHooks/useModal";
 import postsContext from "../context/postsContext";
+import SharedModal from "./Modals/SharedModal";
 
 export default function DetailedPost() {
   const location = useLocation();
@@ -58,10 +59,13 @@ export default function DetailedPost() {
     <>
       <div className=" flex flex-col posts-center   min-h-screen bg-gradient-to-r from-blue-200 to-purple-300">
         {deleteModal.isOpen && (
-          <ModalDeleteConfirm
-            pageNumber={location.state?.pageNumber}
-            handleCancelTheDeleting={deleteModal.closeModal}
-            handleConfirmDeleting={handleConfirmDeleting}
+          // <ModalDeleteConfirm
+          //   handleCancelTheDeleting={deleteModal.closeModal}
+          //   handleConfirmDeleting={handleConfirmDeleting}
+          // />
+          <SharedModal
+            handleModalConfirm={deleteModal.closeModal}
+            handleModalCancel={handleConfirmDeleting}
           />
         )}
         <div className="flex m-10 items-start">

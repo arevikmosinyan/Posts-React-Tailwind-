@@ -12,26 +12,27 @@ import {
   PURPLE_BUTTON,
 } from "../constants/colors";
 import Pages from "./Pages";
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
 
 export default function HomePage() {
   const { posts } = useContext(postsContext);
   const location = useLocation();
   const navigate = useNavigate();
-
-  /*-------------------------pages stats-----------------------*/
   const [pageNumber, setPageNumber] = useState(1);
   const [countOfPages, setCountOfPages] = useState(0);
   const [postCountForASinglePage, setPostCountForASinglePage] = useState(6);
-  const [additionalPage, setAdditionalPage] = useState(false);
-  const [indexOfTheFirstPostOfThePage, setIndexOfTheFirstPostOfThePage] =
-    useState(0);
-  const [indexOfTheLastPostOfThePage, setIndexOfTheLastPostOfThePage] =
-    useState(6);
   const [postsForSinglePage, setPostsForSinglePage] = useState([]);
-  /*---------------------------------------------------------------*/
 
-  /*-----------------------------------------------------------pages-----------------------------------------------------------------------------------------*/
+  useEffect(() => {
+    const pageCount = Math.ceil(posts?.length / postCountForASinglePage);
+    setCountOfPages(pageCount);
+  }, [posts, postCountForASinglePage]);
+
+  useEffect(() => {
+    const firstPostIndex = (pageNumber - 1) * postCountForASinglePage;
+    const lastPostIndex = firstPostIndex + postCountForASinglePage;
+    const slicedPosts = posts?.slice(firstPostIndex, lastPostIndex);
+    setPostsForSinglePage(slicedPosts);
+  }, [pageNumber, postCountForASinglePage, posts]);
 
   useEffect(() => {
     if (location.state?.initialPageNumber) {
@@ -42,55 +43,6 @@ export default function HomePage() {
       setPageNumber(lastPageNumber);
     }
   }, []);
-
-  useEffect(() => {
-    setIndexOfTheFirstPostOfThePage(0);
-    setIndexOfTheLastPostOfThePage(postCountForASinglePage);
-  }, [postCountForASinglePage]);
-
-  useEffect(() => {
-    const firstPostIndex = (pageNumber - 1) * postCountForASinglePage;
-    const lastPostIndex = firstPostIndex + postCountForASinglePage;
-    setIndexOfTheFirstPostOfThePage(firstPostIndex);
-    setIndexOfTheLastPostOfThePage(lastPostIndex);
-
-    const slicedPosts = posts?.slice(firstPostIndex, lastPostIndex);
-    setPostsForSinglePage(slicedPosts);
-  }, [pageNumber, postCountForASinglePage, posts]);
-
-  useEffect(() => {
-    const pageCount = Math.ceil(posts?.length / postCountForASinglePage);
-    setCountOfPages(pageCount);
-  }, [posts, postCountForASinglePage]);
-
-  //  countOfPages and postCountForASinglePage based on posts length
-  useEffect(() => {
-    const additionalPage = posts?.length % postCountForASinglePage !== 0;
-    setAdditionalPage(additionalPage);
-    if (additionalPage) {
-      setCountOfPages(Math.ceil(posts?.length / postCountForASinglePage));
-      // When changing postCountForASinglePage, indexOfTheLastPostOfThePage is updated
-      setIndexOfTheLastPostOfThePage(
-        (posts?.length % postCountForASinglePage) + indexOfTheFirstPostOfThePage
-      );
-    } else {
-      setCountOfPages(Math.trunc(posts.length / postCountForASinglePage));
-      // When changing postCountForASinglePage, indexOfTheLastPostOfThePage is updated
-      setIndexOfTheLastPostOfThePage(
-        postCountForASinglePage + indexOfTheFirstPostOfThePage
-      );
-    }
-  }, [
-    posts,
-    postCountForASinglePage,
-    additionalPage,
-    indexOfTheFirstPostOfThePage,
-  ]);
-
-  let pageButtonsContent = [];
-  for (let i = 1; i <= countOfPages; i++) {
-    pageButtonsContent.push(i);
-  }
 
   function changeThePage(page) {
     setPageNumber(page);
@@ -113,17 +65,13 @@ export default function HomePage() {
               className={`${POST_BACKGROUND_COLOR} relative  rounded-lg p-5 flex flex-col `}
             >
               <div className=" flex flex-col items-stretch my-4 text-left">
-                <div className=" my-1 flex">
-                  <p className={`${LABELS_COLOR}`}>User ID: </p>
-                  <p className={`${TEXT_COLOR} mx-3`}>{post.userId}</p>
-                </div>
                 <div className="my-1 flex">
                   <p className={`${LABELS_COLOR}`}>Title: </p>
                   <p className={`${TEXT_COLOR} mx-3`}> {post.title}</p>
                 </div>
-                <div className=" my-1 flex">
-                  <p className={`${LABELS_COLOR}`}>Post id: </p>
-                  <p className={`${TEXT_COLOR} mx-3`}> {post.id}</p>
+                <div className="my-1 flex">
+                  <p className={`${LABELS_COLOR}`}>User ID : </p>
+                  <p className={`${TEXT_COLOR} mx-3`}>{post.userId}</p>
                 </div>
 
                 <div
@@ -131,11 +79,15 @@ export default function HomePage() {
                 >
                   {post.body}
                 </div>
+                <div className="my-1 flex">
+                  <p className={`${LABELS_COLOR}`}>Post id: </p>
+                  <p className={`${TEXT_COLOR} mx-3`}> {post.id}</p>
+                </div>
               </div>
 
-              <div className=" absolute">
+              <div>
                 <button
-                  className={`px-4 py-2 ${PURPLE_BUTTON} hover:${HOVER_BUTTON} border border-gray-400 text-white rounded `}
+                  className={`px-4 py-2 m-5 absolute bottom-0 right-0 ${PURPLE_BUTTON} hover:${HOVER_BUTTON} border border-gray-400 text-white rounded `}
                   onClick={() => {
                     navigate(DETAILS_ROUTE, {
                       state: {
@@ -152,52 +104,13 @@ export default function HomePage() {
           ))}
         </div>
         <div className="flex justify-center m-5">
-          {/* Pagination */}
-          <nav
-            className="isolate inline-flex -space-x-px rounded-lg"
-            aria-label="Pagination"
-          >
-            {/*------leftArrow-----*/}
-            <button
-              onClick={prevPage}
-              disabled={pageNumber === 1}
-              className={`relative inline-flex bg-gray-800 posts-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 ${
-                pageNumber === 1 && "opacity-50 cursor-not-allowed"
-              }`}
-            >
-              <ChevronLeftIcon className="h-5 w-5" />
-            </button>
-            {/*---------------------*/}
-            {/* Render page numbers */}
-            {pageButtonsContent.map((pageButton, indexOfButton) => {
-              return (
-                <button
-                  key={uuidv4()}
-                  onClick={() => changeThePage(indexOfButton + 1)}
-                  className={`relative inline-flex posts-center ${
-                    indexOfButton + 1 === pageNumber
-                      ? "bg-gray-800  text-white focus-visible:outline focus-visible:outline-5 focus-visible:outline-offset-2 focus-visible:outline-red-600"
-                      : "text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0"
-                  } bg-gray-500 px-4 py-2  text-sm font-semibold`}
-                >
-                  {pageButton}
-                </button>
-              );
-            })}
-            {/*---------------------*/}
-            {/*------rightArrow-----*/}
-            <button
-              onClick={nextPage}
-              disabled={indexOfTheLastPostOfThePage == posts?.length}
-              className={`relative inline-flex bg-gray-800 posts-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 ${
-                indexOfTheLastPostOfThePage >= posts?.length &&
-                "opacity-50 cursor-not-allowed"
-              }`}
-            >
-              <ChevronRightIcon className="h-5 w-5" />
-            </button>
-            {/*---------------------*/}
-          </nav>
+          <Pages
+            pageNumber={pageNumber}
+            countOfPages={countOfPages}
+            changeThePage={changeThePage}
+            nextPage={nextPage}
+            prevPage={prevPage}
+          />
         </div>
       </div>
     </div>
