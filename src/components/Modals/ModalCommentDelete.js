@@ -1,9 +1,8 @@
 import React from "react";
 
-export default function ModalDeleteConfirm({
+export default function ModalCommentDeleteConfirm({
   handleCancelTheDeleting,
   handleConfirmDeleting,
-  pageNumber,
 }) {
   return (
     <div className="fixed z-10 inset-0 overflow-y-auto">
@@ -15,8 +14,7 @@ export default function ModalDeleteConfirm({
         <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
           <div className="sm:flex sm:items-start">
             <p className="text-sm text-gray-500">
-              Are you sure you want to delete this post?
-              {confirmationText}
+              Are you sure you want to delete this comment?
             </p>
           </div>
         </div>

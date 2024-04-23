@@ -101,13 +101,13 @@ export default function HomePage() {
   return (
     <div className=" flex posts-center justify-center align-center h-screen bg-gradient-to-r from-blue-200 to-purple-300">
       <div className="flex flex-col justify-center items-center">
-        <div className="p-6 h-[80vh] w-[80vw] grid grid-cols-3 gap-4 justify-center overflow-y-auto overflow-x-auto bg-white bg-opacity-40 rounded-lg">
+        <div className="p-3  h-[80vh] w-[80vw] grid grid-cols-3 gap-4 justify-center overflow-y-auto overflow-x-auto bg-white bg-opacity-40 rounded-lg">
           {postsForSinglePage?.map((post) => (
             <div
               key={uuidv4()}
-              className={`${POST_BACKGROUND_COLOR} mb-6 p-5 rounded-lg flex`}
+              className={`${POST_BACKGROUND_COLOR} relative  rounded-lg p-5 flex flex-col `}
             >
-              <div className="my-4 text-left">
+              <div className=" flex flex-col items-stretch my-4 text-left">
                 <div className="font-bold my-1 flex">
                   <p className={`${LABELS_COLOR}`}>User ID: </p>
                   <p className={`${TEXT_COLOR} mx-3`}>{post.userId}</p>
@@ -121,10 +121,14 @@ export default function HomePage() {
                   <p className={`${TEXT_COLOR} mx-3`}> {post.id}</p>
                 </div>
 
-                <div className={`${TEXT_COLOR}`}>{post.body}</div>
+                <div
+                  className={`${TEXT_COLOR} pr-10 text-justify indent-4 w-25vw break-words`}
+                >
+                  {post.body}
+                </div>
               </div>
 
-              <div>
+              <div className=" absolute">
                 <button
                   className={`px-4 py-2 ${BUTTON_COLOR} hover:${HOVER_BUTTON}  text-white rounded `}
                   onClick={() => {

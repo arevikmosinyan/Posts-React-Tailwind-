@@ -1,13 +1,20 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { COMMENT_BACKGROUND } from "../constants/colors";
+import { COMMENT_BACKGROUND, BUTTON_LIGHT_COLOR } from "../constants/colors";
+import useModal from "../customHooks/useModal";
+import ModalCommentDeleteConfirm from "./Modals/ModalCommentDelete";
+import ModalCommentAddConfirm from "./Modals/ModalCommentAddConfirm";
 
 export default function Comments({ userId }) {
   const [commentText, setCommentText] = useState("");
   const [allComments, setAllComments] = useState([]);
+  const [indexOfComment, setIndexOfComment] = useState();
+  const addCommentModal = useModal();
+  const deleteCommentModal = useModal();
 
   function onAddComment() {
     setAllComments([...allComments, commentText].reverse());
+    addCommentModal.closeModal();
     setCommentText("");
   }
 
@@ -19,7 +26,17 @@ export default function Comments({ userId }) {
   //   }
 
   function onCancelComment() {
+    deleteCommentModal.closeModal();
+    addCommentModal.closeModal();
     setCommentText("");
+  }
+
+  function onDeleteCommentConfirm() {
+    const updatedAllComments = allComments.filter(
+      (comment, index) => index !== indexOfComment
+    );
+    setAllComments(updatedAllComments);
+    deleteCommentModal.closeModal();
   }
 
   return (
@@ -35,33 +52,47 @@ export default function Comments({ userId }) {
               onChange={(e) => setCommentText(e.target.value)}
             ></textarea>
           </div>
+          {addCommentModal.isOpen && (
+            <ModalCommentAddConfirm
+              handleConfirmAdding={onAddComment}
+              handleCancelAdding={onCancelComment}
+            />
+          )}
           <div className=" flex m-7 items-center">
             <button
-              className="mr-2 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
-              onClick={onCancelComment}
-            >
-              Cancel
-            </button>
-            <button
-              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-              onClick={onAddComment}
+              className={`px-4 py-2 ${BUTTON_LIGHT_COLOR} text-white rounded `}
+              onClick={() => addCommentModal.openModal()}
             >
               Add
             </button>
           </div>
         </div>
-
+        {deleteCommentModal.isOpen && (
+          <ModalCommentDeleteConfirm
+            handleConfirmDeleting={onDeleteCommentConfirm}
+            handleCancelTheDeleting={onCancelComment}
+          />
+        )}
         <ul className="list-none">
-          {allComments.map((comment) => {
+          {allComments.map((comment, index) => {
             return (
               <li
                 key={uuidv4()}
-                className={`${COMMENT_BACKGROUND} w-30vw break-words mb-4 p-4 rounded-lg`}
+                className={`${COMMENT_BACKGROUND} flex justify-between items-center w-30vw break-words mb-4 p-4 rounded-lg`}
               >
                 <p className="font-bold indent-4 text-justify">
                   Comment by {userId} :
                 </p>
                 <p className="indent-4 text-justify">{comment}</p>
+                <button
+                  className={`mt-2 px-3 py-1 ${BUTTON_LIGHT_COLOR} text-white rounded `}
+                  onClick={() => {
+                    deleteCommentModal.openModal();
+                    setIndexOfComment(index);
+                  }}
+                >
+                  Delete
+                </button>
               </li>
             );
           })}

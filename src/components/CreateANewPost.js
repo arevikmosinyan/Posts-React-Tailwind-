@@ -1,9 +1,15 @@
 import React from "react";
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { HOME_ROUTE } from "../constants/routes";
 import ModalCancelConfirm from "././Modals/ModalCancelConfirm";
 import ModalDoneConfirm from "././Modals/ModalDoneConfirm";
+import {
+  BUTTON_COLOR,
+  BUTTON_LIGHT_COLOR,
+  HOVER_BUTTON,
+  HOVER_BUTTON_LIGHT,
+} from "../constants/colors";
 import postsContext from "../context/postsContext";
 import { v4 as uuidv4 } from "uuid";
 
@@ -11,19 +17,18 @@ export default function CreateANewPost() {
   const [name, setName] = useState("");
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
-  const [createdPosts, setCreatedPosts] = useState([]);
-  const [initial, setInitial] = useState(true);
   const [showCancelConfirmation, setShowCancelConfirmation] = useState(false);
   const [showDoneConfirmation, setShowDoneConfirmation] = useState(false);
   const { posts } = useContext(postsContext);
   const { setPosts } = useContext(postsContext);
-
   const navigate = useNavigate();
-
-  /*-------------------------------------------pressing Cancel-----------------*/
 
   function onCancelClick() {
     setShowCancelConfirmation(true);
+  }
+
+  function onDoneClick() {
+    setShowDoneConfirmation(true);
   }
 
   function handleCancelConfirmed() {
@@ -31,14 +36,6 @@ export default function CreateANewPost() {
     setTitle("");
     setBody("");
     setShowCancelConfirmation(false);
-  }
-
-  /*----------------------------------------------------------------------------*/
-
-  /*-----------------------------------pressing Done ----------------------------*/
-
-  function onDoneClick() {
-    setShowDoneConfirmation(true);
   }
 
   function handleDoneConfirmed() {
@@ -55,7 +52,6 @@ export default function CreateANewPost() {
     setShowCancelConfirmation(false);
     setShowDoneConfirmation(false);
   }
-  /*----------------------------------------------------------------------------*/
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-r from-green-200 to-blue-300">
@@ -79,13 +75,13 @@ export default function CreateANewPost() {
       ></textarea>
       <div className="mt-4 flex justify-end">
         <button
-          className="mr-2 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+          className={`mr-2 px-4 py-2 ${BUTTON_LIGHT_COLOR} text-white rounded hover:${HOVER_BUTTON_LIGHT}`}
           onClick={onCancelClick}
         >
           Cancel
         </button>
         <button
-          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          className={`px-4 py-2 ${BUTTON_COLOR} text-white rounded hover:${HOVER_BUTTON}`}
           onClick={onDoneClick}
         >
           Done
