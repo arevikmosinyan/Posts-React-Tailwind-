@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { COMMENT_BACKGROUND, BUTTON_LIGHT_COLOR } from "../constants/colors";
+import {
+  COMMENT_BACKGROUND,
+  BUTTON_LIGHT_COLOR,
+  TEXT_COLOR,
+} from "../constants/colors";
 import useModal from "../customHooks/useModal";
 import ModalCommentDeleteConfirm from "./Modals/ModalCommentDelete";
 import ModalCommentAddConfirm from "./Modals/ModalCommentAddConfirm";
@@ -9,6 +13,7 @@ export default function Comments({ userId }) {
   const [commentText, setCommentText] = useState("");
   const [allComments, setAllComments] = useState([]);
   const [indexOfComment, setIndexOfComment] = useState();
+  const [showAllComments, setShowAllComments] = useState(false);
   const addCommentModal = useModal();
   const deleteCommentModal = useModal();
 
@@ -60,7 +65,7 @@ export default function Comments({ userId }) {
           )}
           <div className=" flex m-7 items-center">
             <button
-              className={`px-4 py-2 ${BUTTON_LIGHT_COLOR} text-white rounded `}
+              className={`px-4 py-2 ${BUTTON_LIGHT_COLOR} text-white border border-gray-500 rounded `}
               onClick={() => addCommentModal.openModal()}
             >
               Add
@@ -75,6 +80,10 @@ export default function Comments({ userId }) {
         )}
         <ul className="list-none">
           {allComments.map((comment, index) => {
+            if (index >= 3 && !showAllComments) {
+              return null;
+            }
+
             return (
               <li
                 key={uuidv4()}
@@ -96,6 +105,14 @@ export default function Comments({ userId }) {
               </li>
             );
           })}
+          {allComments.length >= 3 && (
+            <span
+              className={`mt-2 px-3 py-1 ${TEXT_COLOR} rounded cursor-pointer underline`}
+              onClick={() => setShowAllComments(!showAllComments)}
+            >
+              {showAllComments ? "...Less" : "...More"}
+            </span>
+          )}
         </ul>
       </div>
     </>

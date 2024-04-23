@@ -21,7 +21,6 @@ export default function DetailedPost() {
   const { posts } = useContext(postsContext);
   const [bodyOfPost, setBodyOfPost] = useState(location.state?.post.body);
   const [newBodyFromModalEdit, setNewBodyFromModalEdit] = useState("");
-  const [redirected, setRedirected] = useState(false);
   const navigate = useNavigate();
   const deleteModal = useModal();
   const editModal = useModal();
@@ -32,7 +31,9 @@ export default function DetailedPost() {
 
   function handleConfirmDeleting() {
     setPosts(posts.filter((post) => post.id !== location.state?.post.id));
-    navigate(HOME_ROUTE, { state: { pageNumber: location.state?.pageNumber } });
+    navigate(HOME_ROUTE, {
+      state: { initialPageNumber: location.state?.pageNumber },
+    });
     deleteModal.closeModal();
   }
 
@@ -45,16 +46,14 @@ export default function DetailedPost() {
         return post;
       })
     );
-    setRedirected(true);
     navigate(HOME_ROUTE, {
       state: {
-        redirected: redirected,
         initialPageNumber: location.state?.pageNumber,
       },
     });
     editModal.closeModal();
   }
-  console.log(location.state?.pageNumber + " location.state?.pageNumber");
+
   return (
     <>
       <div className=" flex flex-col posts-center   min-h-screen bg-gradient-to-r from-blue-200 to-purple-300">

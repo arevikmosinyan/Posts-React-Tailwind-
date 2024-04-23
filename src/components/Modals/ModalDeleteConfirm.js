@@ -16,7 +16,6 @@ export default function ModalDeleteConfirm({
           <div className="sm:flex sm:items-start">
             <p className="text-sm text-gray-500">
               Are you sure you want to delete this post?
-              {confirmationText}
             </p>
           </div>
         </div>

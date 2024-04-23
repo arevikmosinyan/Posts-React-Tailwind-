@@ -17,6 +17,7 @@ export default function CreateANewPost() {
   const [name, setName] = useState("");
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
+  const [wasEdited, setWasEdited] = useState(true);
   const [showCancelConfirmation, setShowCancelConfirmation] = useState(false);
   const [showDoneConfirmation, setShowDoneConfirmation] = useState(false);
   const { posts } = useContext(postsContext);
@@ -41,7 +42,10 @@ export default function CreateANewPost() {
   function handleDoneConfirmed() {
     const newPost = { name: name, title: title, body: body, id: uuidv4() };
     setPosts([...posts, newPost]);
-    navigate(HOME_ROUTE);
+    navigate(HOME_ROUTE, {
+      state: { wasEdited: wasEdited },
+    });
+
     setName("");
     setTitle("");
     setBody("");
