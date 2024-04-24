@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   COMMENT_BACKGROUND,
   BUTTON_LIGHT_COLOR,
@@ -12,7 +12,6 @@ import { v4 as uuidv4 } from 'uuid';
 
 export default function Comments({ userId, postId }) {
   const [commentText, setCommentText] = useState('');
-  const [allComments, setAllComments] = useState([]);
   const [indexOfComment, setIndexOfComment] = useState();
   const [showAllComments, setShowAllComments] = useState(false);
   const { posts } = useContext(postsContext);
@@ -20,25 +19,20 @@ export default function Comments({ userId, postId }) {
   const addCommentModal = useModal();
   const deleteCommentModal = useModal();
 
-  function onAddComment() {
-    setAllComments([...allComments, commentText].reverse());
-    addCommentModal.closeModal();
-    resetStates();
-  }
+  const targetPost = posts?.find((post) => post.id === postId);
 
-  useEffect(() => {
+  function onAddComment() {
     setPosts(
       posts.map((post) => {
         if (post.id === postId) {
-          return {
-            ...post,
-            allComments: [...post.allComments, ...allComments],
-          };
+          return { ...post, allComments: [...post.allComments, commentText] };
+        } else {
+          return post;
         }
-        return post;
       }),
     );
-  }, [allComments, postId]);
+    closeModalsAndResetStates();
+  }
 
   //   function handleKeyDown(event) {
   //     if (event.key === "Enter") {
@@ -47,21 +41,27 @@ export default function Comments({ userId, postId }) {
   //     }
   //   }
 
-  function onCancelComment() {
+  function onDeleteCommentConfirm() {
+    setPosts(
+      posts.map((post) => {
+        if (post.id === postId) {
+          return {
+            ...post,
+            allComments: post?.allComments.filter(
+              (comment, index) => index !== indexOfComment,
+            ),
+          };
+        } else {
+          return post;
+        }
+      }),
+    );
+    closeModalsAndResetStates();
+  }
+
+  function closeModalsAndResetStates() {
     deleteCommentModal.closeModal();
     addCommentModal.closeModal();
-    resetStates();
-  }
-
-  function onDeleteCommentConfirm() {
-    const updatedAllComments = allComments.filter(
-      (comment, index) => index !== indexOfComment,
-    );
-    setAllComments(updatedAllComments);
-    deleteCommentModal.closeModal();
-  }
-
-  function resetStates() {
     setCommentText('');
   }
 
@@ -70,7 +70,9 @@ export default function Comments({ userId, postId }) {
       <div className='flex flex-col items-start w-full'>
         <div className='flex'>
           <div>
-            <p className='font-bold p-3'>{allComments.length} Comments</p>
+            <p className='font-bold p-3'>
+              {targetPost?.allComments.length} Comments
+            </p>
             <textarea
               className='w-30vw h-20 border border-gray-700 rounded-md p-2 '
               placeholder='Write your comment here...'
@@ -80,7 +82,7 @@ export default function Comments({ userId, postId }) {
           {addCommentModal.isOpen && (
             <SharedModal
               handleModalConfirm={onAddComment}
-              handleModalCancel={onCancelComment}
+              handleModalCancel={closeModalsAndResetStates}
               modalText='Are you sure you want to add this comment?'
               confirmButtonText='Yes, add'
               cancelButtonText='No, skip'
@@ -100,13 +102,14 @@ export default function Comments({ userId, postId }) {
         {deleteCommentModal.isOpen && (
           <SharedModal
             handleModalConfirm={onDeleteCommentConfirm}
-            handleModalCancel={onCancelComment}
+            handleModalCancel={closeModalsAndResetStates}
+            modalText='Are you sure you want to delete this comment?'
             confirmButtonText='Yes, delete'
             cancelButtonText='No'
           />
         )}
         <ul className='list-none'>
-          {allComments.map((comment, index) => {
+          {targetPost?.allComments?.map((comment, index) => {
             if (index >= 2 && !showAllComments) {
               return null;
             }
@@ -127,7 +130,7 @@ export default function Comments({ userId, postId }) {
               </li>
             );
           })}
-          {allComments.length > 2 && (
+          {targetPost?.allComments.length > 2 && (
             <span
               className={`mt-2 px-3 py-1 ${TEXT_COLOR} rounded cursor-pointer underline`}
               onClick={() => setShowAllComments(!showAllComments)}>

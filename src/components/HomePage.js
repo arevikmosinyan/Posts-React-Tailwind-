@@ -83,7 +83,26 @@ export default function HomePage() {
                 <div className='my-1 flex'>
                   <p className={`${LABELS_COLOR}`}>Comments: </p>
                   <p className={`${TEXT_COLOR} mx-3`}>
-                    {post.allComments.map((comment) => comment + ' : ')}
+                    {post.allComments?.map((comment, index) => {
+                      if (index >= 1) {
+                        return null;
+                      }
+                      return comment + ' :';
+                    })}
+                    {post.allComments?.length > 1 && (
+                      <button
+                        className={`mt-2 px-3 py-1 ${TEXT_COLOR} rounded cursor-pointer underline`}
+                        onClick={() =>
+                          navigate(DETAILS_ROUTE, {
+                            state: {
+                              post: post,
+                              pageNumber: pageNumber,
+                            },
+                          })
+                        }>
+                        ...More
+                      </button>
+                    )}
                   </p>
                 </div>
               </div>

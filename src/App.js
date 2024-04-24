@@ -18,7 +18,7 @@ function App() {
       .then((response) => response.json())
       .then((posts) => {
         if (!canceled) {
-          setPosts(posts);
+          setPosts(posts.map((post) => ({ ...post, allComments: [] })));
         }
       })
       .catch((error) => console.log(error.message));
