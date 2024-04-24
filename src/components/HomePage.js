@@ -80,6 +80,12 @@ export default function HomePage() {
                   <p className={`${LABELS_COLOR}`}>Post id: </p>
                   <p className={`${TEXT_COLOR} mx-3`}> {post.id}</p>
                 </div>
+                <div className='my-1 flex'>
+                  <p className={`${LABELS_COLOR}`}>Comments: </p>
+                  <p className={`${TEXT_COLOR} mx-3`}>
+                    {post.allComments.map((comment) => comment + ' : ')}
+                  </p>
+                </div>
               </div>
 
               <div>

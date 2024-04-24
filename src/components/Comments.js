@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import {
   COMMENT_BACKGROUND,
   BUTTON_LIGHT_COLOR,
@@ -10,21 +10,35 @@ import SharedModal from './Modals/SharedModal';
 import postsContext from '../context/postsContext';
 import { v4 as uuidv4 } from 'uuid';
 
-export default function Comments({ userId }) {
+export default function Comments({ userId, postId }) {
   const [commentText, setCommentText] = useState('');
   const [allComments, setAllComments] = useState([]);
   const [indexOfComment, setIndexOfComment] = useState();
   const [showAllComments, setShowAllComments] = useState(false);
   const { posts } = useContext(postsContext);
+  const { setPosts } = useContext(postsContext);
   const addCommentModal = useModal();
   const deleteCommentModal = useModal();
 
   function onAddComment() {
     setAllComments([...allComments, commentText].reverse());
-
     addCommentModal.closeModal();
     resetStates();
   }
+
+  useEffect(() => {
+    setPosts(
+      posts.map((post) => {
+        if (post.id === postId) {
+          return {
+            ...post,
+            allComments: [...post.allComments, ...allComments],
+          };
+        }
+        return post;
+      }),
+    );
+  }, [allComments, postId]);
 
   //   function handleKeyDown(event) {
   //     if (event.key === "Enter") {
