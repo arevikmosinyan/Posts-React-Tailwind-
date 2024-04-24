@@ -34,7 +34,13 @@ export default function CreateANewPost() {
   }
 
   function handleDoneConfirmed() {
-    const newPost = { userId: name, title: title, body: body, id: uuidv4() };
+    const newPost = {
+      userId: name,
+      title: title,
+      body: body,
+      id: uuidv4(),
+      allComments: [],
+    };
     setPosts([...posts, newPost]);
     navigate(HOME_ROUTE, {
       state: { wasEdited: wasEdited },

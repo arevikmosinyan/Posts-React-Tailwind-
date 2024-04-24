@@ -8,7 +8,7 @@ import {
   LABELS_COLOR,
   TEXT_COLOR,
   HOVER_BUTTON,
-  PURPLE_BUTTON,
+  BUTTON_COLOR,
 } from '../constants/colors';
 import Pages from './Pages';
 
@@ -81,7 +81,9 @@ export default function HomePage() {
                   <p className={`${TEXT_COLOR} mx-3`}> {post.id}</p>
                 </div>
                 <div className='my-1 flex'>
-                  <p className={`${LABELS_COLOR}`}>Comments: </p>
+                  <p className={`${LABELS_COLOR}`}>
+                    Comments: {post.allComments.length}
+                  </p>
                   <p className={`${TEXT_COLOR} mx-3`}>
                     {post.allComments?.map((comment, index) => {
                       if (index >= 1) {
@@ -109,7 +111,7 @@ export default function HomePage() {
 
               <div>
                 <button
-                  className={`px-4 py-2 m-5 absolute bottom-0 right-0 ${PURPLE_BUTTON} hover:${HOVER_BUTTON} border border-gray-400 text-white rounded `}
+                  className={`px-4 py-2 m-5 absolute bottom-0 right-0 ${BUTTON_COLOR} hover:${HOVER_BUTTON} border border-gray-400 text-white rounded `}
                   onClick={() => {
                     navigate(DETAILS_ROUTE, {
                       state: {

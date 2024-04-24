@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import {
   COMMENT_BACKGROUND,
-  BUTTON_LIGHT_COLOR,
+  BUTTON_COLOR,
   BUTTON_DISABLED,
   TEXT_COLOR,
 } from '../constants/colors';
@@ -92,7 +92,7 @@ export default function Comments({ userId, postId }) {
             <button
               disabled={commentText.trim() === ''}
               className={`px-4 py-2 ${
-                commentText.trim() === '' ? BUTTON_DISABLED : BUTTON_LIGHT_COLOR
+                commentText.trim() === '' ? BUTTON_DISABLED : BUTTON_COLOR
               } text-white border border-gray-500 rounded `}
               onClick={() => addCommentModal.openModal()}>
               Add
@@ -120,7 +120,7 @@ export default function Comments({ userId, postId }) {
                 <p className='indent-4 text-justify'>Comment by {userId} :</p>
                 <p className='indent-4 text-justify'>{comment}</p>
                 <button
-                  className={`mt-2 px-3 py-1 ${BUTTON_LIGHT_COLOR} text-white rounded `}
+                  className={`mt-2 px-3 py-1 ${BUTTON_COLOR} text-white rounded `}
                   onClick={() => {
                     deleteCommentModal.openModal();
                     setIndexOfComment(index);
