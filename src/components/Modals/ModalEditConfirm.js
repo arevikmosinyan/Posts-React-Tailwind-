@@ -1,17 +1,21 @@
-import React, { useEffect, useState } from "react";
-import { BUTTON_COLOR, HOVER_BUTTON } from "../../constants/colors";
-//in Detailes post editing, changing the post
+import React, { useState } from "react";
+import {
+  BUTTON_COLOR,
+  HOVER_BUTTON,
+  BUTTON_DISABLED,
+} from "../../constants/colors";
+
 export default function ModalEditConfirm({
-  handleConfirmEditing,
+  onSave,
   handleCancelTheEditing,
   bodyOfPost,
-  handleNewBodyFromModalEdit,
 }) {
-  const [newBody, setNewBody] = useState("");
+  const [newBody, setNewBody] = useState(bodyOfPost);
 
-  useEffect(() => {
-    handleNewBodyFromModalEdit(newBody);
-  }, [newBody]);
+  function handleSave() {
+    onSave(newBody);
+    handleCancelTheEditing();
+  }
 
   return (
     <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-gray-800 bg-opacity-50">
@@ -19,13 +23,16 @@ export default function ModalEditConfirm({
         <textarea
           className="w-96 h-56 border border-gray-700 rounded-md p-2 mb-4"
           placeholder="Change your post here..."
-          value={newBody || bodyOfPost}
+          value={newBody}
           onChange={(e) => setNewBody(e.target.value)}
         ></textarea>
         <div className="flex justify-end">
           <button
-            className={`mr-2 px-4 py-2 ${BUTTON_COLOR} text-white rounded hover:${HOVER_BUTTON}`}
-            onClick={handleConfirmEditing}
+            disabled={newBody.trim() === ""}
+            className={`mr-2 px-4 py-2 ${
+              newBody.trim() === "" ? BUTTON_DISABLED : BUTTON_COLOR
+            }  text-white rounded hover:${HOVER_BUTTON}`}
+            onClick={handleSave}
           >
             Save
           </button>
