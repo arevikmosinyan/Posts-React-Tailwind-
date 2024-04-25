@@ -45,7 +45,7 @@ export default function Pages({
               pageButton === pageNumber
                 ? "bg-gray-800  text-white focus-visible:outline focus-visible:outline-5 focus-visible:outline-offset-2 focus-visible:outline-red-600"
                 : "text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0"
-            } bg-gray-500 px-3 py-2  text-sm font-semibold md:px-4 md:py-2`}
+            } bg-gray-500 px-2 py-2  text-sm font-semibold md:px-4 md:py-2`}
           >
             {pageButton}
           </button>

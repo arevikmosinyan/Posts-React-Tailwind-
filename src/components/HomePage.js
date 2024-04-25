@@ -47,14 +47,10 @@ export default function HomePage() {
     setPageNumber(page);
   }
 
-  // <div className=" flex posts-center justify-center align-center h-screen bg-gradient-to-r from-blue-200 to-purple-300">
-  //     <div className="flex flex-col justify-center items-center">
-  //       <div className="p-3  h-[80vh] w-[80vw] grid grid-cols-3 gap-5 justify-center overflow-y-auto overflow-x-auto bg-white bg-opacity-40 rounded-lg">
-
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-blue-200 to-purple-300">
-      <div className="flex flex-col items-center w-full max-w-7xl px-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 md:gap-5  justify-center bg-white bg-opacity-40 rounded-lg p-3 min-h-[80vh] min-w-[80vw]">
+      <div className="flex flex-col items-center w-full max-w-7xl px-4 ">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 md:gap-5  justify-center bg-white bg-opacity-40 rounded-lg p-3 min-h-[80vh] min-w-[80vw] ">
           {postsForSinglePage?.map((post) => (
             <div
               key={uuidv4()}
