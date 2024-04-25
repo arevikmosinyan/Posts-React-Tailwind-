@@ -123,10 +123,12 @@ export default function Comments({ userId, postId }) {
             return (
               <li
                 key={uuidv4()}
-                className={`${COMMENT_BACKGROUND} my-3 flex items-center  text-justify indent-4 max-w-full break-words rounded-lg justify-between`}
+                className={`${COMMENT_BACKGROUND} sm:w-[80vw] md:w-[80vw] lg:w-[40vw] my-3 flex items-center  text-justify break-words indent-4   rounded-lg justify-between`}
               >
-                <p className="indent-4 text-justify">Comment by {userId} :</p>
-                <p className="indent-4 text-justify">{comment}</p>
+                <p className="sm:indent-1 md:indent-4 text-justify sm:text-sm md:text-base">
+                  Comment by {userId} :
+                </p>
+                <p className="text-justify w-[60%]">{comment}</p>
                 <button
                   className={`m-3 md:mt-2 px-3 py-1 ${BUTTON_COLOR} text-white rounded `}
                   onClick={() => {

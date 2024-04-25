@@ -75,7 +75,7 @@ export default function HomePage() {
                   <p className={`${LABELS_COLOR}`}>Post id: </p>
                   <p className={`${TEXT_COLOR} mx-3`}> {post.id}</p>
                 </div>
-                <div className="my-1 flex">
+                <div className="my-1 flex items-center">
                   <p className={`${LABELS_COLOR}`}>
                     Comments: {post.allComments.length}
                   </p>
