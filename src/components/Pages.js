@@ -1,14 +1,6 @@
-import React, { useMemo } from "react";
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
-import { v4 as uuidv4 } from "uuid";
-import {
-  BUTTON_COLOR,
-  POST_BACKGROUND_COLOR,
-  LABELS_COLOR,
-  TEXT_COLOR,
-  HOVER_BUTTON,
-  BUTTON_LIGHT_COLOR,
-} from "../constants/colors";
+import React, { useMemo } from 'react';
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid';
+import { v4 as uuidv4 } from 'uuid';
 
 export default function Pages({
   pageNumber,
@@ -27,15 +19,14 @@ export default function Pages({
 
   return (
     <>
-      <nav className="inline-flex rounded-lg">
+      <nav className='inline-flex rounded-lg'>
         <button
           onClick={prevPage}
           disabled={pageNumber === 1}
-          className={`relative inline-flex bg-gray-800 posts-center rounded-l-md px-2 py-2 text-gray-400  hover:${HOVER_BUTTON} focus:z-20 focus:outline-offset-0 ${
-            pageNumber === 1 && "opacity-50 cursor-not-allowed"
-          }`}
-        >
-          <ChevronLeftIcon className="h-5 w-5" />
+          className={`relative inline-flex bg-gray-800 posts-center rounded-l-md px-2 py-2 text-gray-400   focus:z-20 focus:outline-offset-0 ${
+            pageNumber === 1 && 'opacity-50 cursor-not-allowed'
+          }`}>
+          <ChevronLeftIcon className='h-5 w-5' />
         </button>
         {pageButtonsContent.map((pageButton) => (
           <button
@@ -43,10 +34,9 @@ export default function Pages({
             onClick={() => changeThePage(pageButton)}
             className={`relative inline-flex posts-center ${
               pageButton === pageNumber
-                ? "bg-gray-800  text-white focus-visible:outline focus-visible:outline-5 focus-visible:outline-offset-2 focus-visible:outline-red-600"
-                : "text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0"
-            } bg-gray-500 px-2 py-2  text-sm font-semibold md:px-4 md:py-2`}
-          >
+                ? 'bg-gray-800  text-white focus-visible:outline focus-visible:outline-5 focus-visible:outline-offset-2 focus-visible:outline-red-600'
+                : 'text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0'
+            } bg-gray-500 px-2 py-2  text-sm font-semibold md:px-4 md:py-2`}>
             {pageButton}
           </button>
         ))}
@@ -54,56 +44,11 @@ export default function Pages({
           onClick={nextPage}
           disabled={pageNumber === countOfPages}
           className={`relative inline-flex bg-gray-800 posts-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 ${
-            pageNumber === countOfPages && "opacity-50 cursor-not-allowed"
-          }`}
-        >
-          <ChevronRightIcon className="h-5 w-5" />
+            pageNumber === countOfPages && 'opacity-50 cursor-not-allowed'
+          }`}>
+          <ChevronRightIcon className='h-5 w-5' />
         </button>
       </nav>
     </>
   );
 }
-
-/*
-return (
-  <>
-    <nav
-      className="isolate inline-flex -space-x-px rounded-lg"
-      aria-label="Pagination"
-    >
-      <button
-        onClick={prevPage}
-        disabled={pageNumber === 1}
-        className={`relative inline-flex bg-gray-800 posts-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 ${
-          pageNumber === 1 && "opacity-50 cursor-not-allowed"
-        }`}
-      >
-        <ChevronLeftIcon className="h-5 w-5" />
-      </button>
-      {pageButtonsContent.map((pageButton) => (
-        <button
-          key={uuidv4()}
-          onClick={() => changeThePage(pageButton)}
-          className={`relative inline-flex posts-center ${
-            pageButton === pageNumber
-              ? "bg-gray-800  text-white focus-visible:outline focus-visible:outline-5 focus-visible:outline-offset-2 focus-visible:outline-red-600"
-              : "text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0"
-          } bg-gray-500 px-3 py-2  text-sm font-semibold md:px-4 md:py-2`}
-        >
-          {pageButton}
-        </button>
-      ))}
-      <button
-        onClick={nextPage}
-        disabled={pageNumber === countOfPages}
-        className={`relative inline-flex bg-gray-800 posts-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 ${
-          pageNumber === countOfPages && "opacity-50 cursor-not-allowed"
-        }`}
-      >
-        <ChevronRightIcon className="h-5 w-5" />
-      </button>
-    </nav>
-  </>
-);
-}
-*/

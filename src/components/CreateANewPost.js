@@ -1,21 +1,17 @@
-import React, { useEffect } from "react";
-import { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import { HOME_ROUTE } from "../constants/routes";
-import useModal from "../customHooks/useModal";
-import {
-  BUTTON_COLOR,
-  HOVER_BUTTON,
-  BUTTON_DISABLED,
-} from "../constants/colors";
-import postsContext from "../context/postsContext";
-import { v4 as uuidv4 } from "uuid";
-import SharedModal from "./Modals/SharedModal";
+import React from 'react';
+import { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { HOME_ROUTE } from '../constants/routes';
+import useModal from '../customHooks/useModal';
+import { BUTTON_COLOR, BUTTON_DISABLED } from '../constants/colors';
+import postsContext from '../context/postsContext';
+import { v4 as uuidv4 } from 'uuid';
+import SharedModal from './Modals/SharedModal';
 
 export default function CreateANewPost() {
-  const [name, setName] = useState("");
-  const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
+  const [name, setName] = useState('');
+  const [title, setTitle] = useState('');
+  const [body, setBody] = useState('');
   const [wasEdited, setWasEdited] = useState(true);
   const { posts } = useContext(postsContext);
   const { setPosts } = useContext(postsContext);
@@ -23,7 +19,7 @@ export default function CreateANewPost() {
   const doneModal = useModal();
 
   function isFilled() {
-    if (name.trim() !== "" && title.trim() !== "" && body.trim() !== "") {
+    if (name.trim() !== '' && title.trim() !== '' && body.trim() !== '') {
       return true;
     }
   }
@@ -50,39 +46,35 @@ export default function CreateANewPost() {
   }
 
   function resetStates() {
-    setName("");
-    setTitle("");
-    setBody("");
+    setName('');
+    setTitle('');
+    setBody('');
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-green-200 to-blue-300">
+    <div className='flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-green-200 to-blue-300'>
       <textarea
-        className="w-96 h-20 border border-gray-700 rounded-md p-2 m-5"
-        placeholder="Write your name here..."
+        className='w-96 h-20 border border-gray-700 rounded-md p-2 m-5'
+        placeholder='Write your name here...'
         value={name}
-        onChange={(e) => setName(e.target.value)}
-      ></textarea>
+        onChange={(e) => setName(e.target.value)}></textarea>
       <textarea
-        className="w-96 h-20 border border-gray-700 rounded-md p-2 m-5"
-        placeholder="Write your post title here..."
+        className='w-96 h-20 border border-gray-700 rounded-md p-2 m-5'
+        placeholder='Write your post title here...'
         value={title}
-        onChange={(e) => setTitle(e.target.value)}
-      ></textarea>
+        onChange={(e) => setTitle(e.target.value)}></textarea>
       <textarea
-        className="w-96 h-40 border border-gray-700 rounded-md p-2 m-5"
-        placeholder="Write your post here..."
+        className='w-96 h-40 border border-gray-700 rounded-md p-2 m-5'
+        placeholder='Write your post here...'
         value={body}
-        onChange={(e) => setBody(e.target.value)}
-      ></textarea>
-      <div className="mt-4 flex justify-end">
+        onChange={(e) => setBody(e.target.value)}></textarea>
+      <div className='mt-4 flex justify-end'>
         <button
           disabled={!isFilled()}
           className={` px-4 py-2 ${
             !isFilled() ? BUTTON_DISABLED : BUTTON_COLOR
-          }  text-white rounded hover:${HOVER_BUTTON} `}
-          onClick={() => doneModal.openModal()}
-        >
+          }  text-white rounded `}
+          onClick={() => doneModal.openModal()}>
           Done
         </button>
       </div>
@@ -90,9 +82,9 @@ export default function CreateANewPost() {
         <SharedModal
           handleModalConfirm={handleDoneConfirmed}
           handleModalCancel={handleCancelConfirmed}
-          modalText="Are you sure you want to add this post?"
-          confirmButtonText="Yes, create"
-          cancelButtonText="No, skip"
+          modalText='Are you sure you want to add this post?'
+          confirmButtonText='Yes, create'
+          cancelButtonText='No, skip'
         />
       )}
     </div>
